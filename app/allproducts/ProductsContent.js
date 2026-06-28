@@ -25,8 +25,7 @@ export default async function ProductsContent({ searchParams }) {
             All Products
           </h1>
           <p className="max-w-3xl text-base text-stone-300 sm:text-lg md:text-xl">
-            Discover our complete collection of {data.totalProducts} elegant floral
-            arrangements
+            Discover our complete collection of {data.totalProducts} premium kids outfits — wedding wear, event suits & girls dresses in Pakistan
           </p>
         </div>
       </div>

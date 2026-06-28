@@ -116,7 +116,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50/30 to-white">
-      {/* Back Navigation */}
       <div className="px-5 lg:px-8 xl:px-[8%] py-4">
         <Link
           href="/"
@@ -129,43 +128,40 @@ export default function LoginPage() {
 
       <div className="flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-sm overflow-hidden border border-stone-200">
-          {/* Top decorative line */}
           <div className="h-2 bg-gradient-to-r from-stone-800 to-stone-900"></div>
 
-          {/* Main content */}
           <div className="p-8">
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-stone-100 to-amber-100 rounded-full mb-4 border border-stone-200">
                 <Flower2 className="text-stone-700" size={32} />
               </div>
               <h1 className="text-3xl font-bold text-stone-800 mb-2">
-                Welcome Back
+                Welcome back
               </h1>
               <p className="text-stone-600">
-                Sign in to your Rosélle Studio account
+                Sign in with your email and password
               </p>
-              <p className="text-stone-500 text-sm mt-1">
-                Use the link from the email we sent you to activate, then sign in below with your email and password.
-              </p>
-              <p className="text-stone-500 text-sm mt-2">
-                Don&apos;t have an account? <Link href="/register" className="text-green-700 font-medium hover:text-green-800">Create one</Link>
+              <p className="text-stone-500 text-sm mt-3">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="text-stone-900 font-medium hover:text-black underline underline-offset-2"
+                >
+                  Create one
+                </Link>
               </p>
             </div>
 
-            {/* Error message */}
             {error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
                 {error}
               </div>
             )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-stone-800 mb-2">
-                  Email Address
+                  Email
                 </label>
                 <div className="relative">
                   <Mail
@@ -177,13 +173,13 @@ export default function LoginPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    autoComplete="email"
                     className="w-full pl-10 pr-4 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800"
                     placeholder="your@email.com"
                   />
                 </div>
               </div>
 
-              {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-stone-800 mb-2">
                   Password
@@ -198,6 +194,7 @@ export default function LoginPage() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="current-password"
                     className="w-full pl-10 pr-12 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800"
                     placeholder="Enter your password"
                   />
@@ -211,7 +208,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Remember me & Forgot password */}
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -231,11 +227,10 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}
-                aria-label={isLoading ? "Signing in..." : "Sign in to your account"}
+                aria-label={isLoading ? "Signing in..." : "Sign in"}
                 className="w-full py-4 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all shadow-sm hover:shadow-md font-semibold flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed border border-stone-900"
               >
                 {isLoading ? (
@@ -245,31 +240,29 @@ export default function LoginPage() {
                   </>
                 ) : (
                   <>
-                    <span>Sign in to my account</span>
+                    <span>Sign in</span>
                     <ArrowRight size={20} />
                   </>
                 )}
               </button>
 
-              {/* Divider */}
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-stone-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-4 bg-white text-stone-500">
-                    New to Roselle Studio?
+                    New to Tara Kids?
                   </span>
                 </div>
               </div>
 
-              {/* Register Link */}
               <div className="text-center">
                 <Link
                   href="/register"
                   className="inline-flex items-center gap-2 px-6 py-3 border-2 border-stone-300 text-stone-700 rounded-full hover:bg-stone-50 transition-colors font-medium"
                 >
-                  <span>Create New Account</span>
+                  <span>Create account</span>
                   <ArrowRight size={16} />
                 </Link>
               </div>

@@ -6,26 +6,26 @@ import {
   Flower2,
   Mail,
   User,
+  Lock,
   ArrowRight,
   ChevronLeft,
   Check,
   AlertCircle,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { createCustomerInShopify, loginCustomer, getCustomerData } from "../lib/shopify";
 
-function randomPassword(length = 12) {
-  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
-  let s = "";
-  for (let i = 0; i < length; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
-  return s;
-}
+const MIN_PASSWORD = 8;
 
 export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [shopifyError, setShopifyError] = useState("");
@@ -33,9 +33,13 @@ export default function RegisterPage() {
 
   const validateForm = () => {
     const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email.trim()))
       newErrors.email = "Invalid email format";
+    if (!formData.password) newErrors.password = "Password is required";
+    else if (formData.password.length < MIN_PASSWORD)
+      newErrors.password = `Password must be at least ${MIN_PASSWORD} characters`;
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -52,31 +56,33 @@ export default function RegisterPage() {
       const nameParts = (formData.name || "").trim().split(/\s+/);
       const firstName = nameParts[0] || "";
       const lastName = nameParts.slice(1).join(" ") || "";
-      const password = randomPassword(12);
-      const customerData = {
+      const customerPayload = {
         email: formData.email.trim(),
-        password,
+        password: formData.password,
         firstName,
         lastName,
         phone: "",
         acceptsMarketing: false,
       };
 
-      await createCustomerInShopify(customerData);
+      await createCustomerInShopify(customerPayload);
 
       try {
-        const tokenData = await loginCustomer(formData.email.trim(), password);
+        const tokenData = await loginCustomer(
+          formData.email.trim(),
+          formData.password
+        );
         if (tokenData?.accessToken) {
-          const customerData = await getCustomerData(tokenData.accessToken);
+          const customer = await getCustomerData(tokenData.accessToken);
           const userData = {
-            id: customerData.id,
-            shopifyId: customerData.id,
-            firstName: customerData.firstName || "",
-            lastName: customerData.lastName || "",
-            email: customerData.email,
-            phone: customerData.phone || "",
-            acceptsMarketing: customerData.acceptsMarketing || false,
-            createdAt: customerData.createdAt,
+            id: customer.id,
+            shopifyId: customer.id,
+            firstName: customer.firstName || "",
+            lastName: customer.lastName || "",
+            email: customer.email,
+            phone: customer.phone || "",
+            acceptsMarketing: customer.acceptsMarketing || false,
+            createdAt: customer.createdAt,
             accessToken: tokenData.accessToken,
             tokenExpires: tokenData.expiresAt,
           };
@@ -85,11 +91,12 @@ export default function RegisterPage() {
             localStorage.setItem("bloomcraft_logged_in", "true");
             localStorage.setItem("bloomcraft_token", tokenData.accessToken);
           }
-          setSuccess(true);
           router.replace("/Account");
           return;
         }
-      } catch (_) {}
+      } catch (_) {
+        /* Store may require email verification before login */
+      }
       setSuccess(true);
     } catch (error) {
       if (
@@ -100,7 +107,7 @@ export default function RegisterPage() {
           "This email is already registered. Please sign in or use a different email."
         );
       } else if (error.message?.includes("invalid")) {
-        setShopifyError("Invalid email format. Please check your email address.");
+        setShopifyError("Invalid details. Please check your email and password.");
       } else {
         setShopifyError(error.message || "Registration failed. Please try again.");
       }
@@ -110,11 +117,8 @@ export default function RegisterPage() {
   };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -126,7 +130,6 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50/30 to-white">
-      {/* Back Navigation */}
       <div className="px-5 lg:px-8 xl:px-[8%] py-6">
         <Link
           href="/"
@@ -139,43 +142,37 @@ export default function RegisterPage() {
 
       <div className="flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-sm overflow-hidden border border-stone-200">
-          {/* Top decorative line */}
           <div className="h-2 bg-gradient-to-r from-stone-800 to-stone-900"></div>
 
-          {/* Success Message */}
           {success && (
-            <div className="m-6 p-4 bg-green-50 border border-green-200 rounded-xl animate-fadeIn">
+            <div className="m-6 p-4 bg-stone-50 border border-stone-200 rounded-xl animate-fadeIn">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center border border-green-200">
-                  <Check className="text-green-600" size={20} />
+                <div className="w-10 h-10 bg-stone-100 rounded-full flex items-center justify-center border border-stone-200">
+                  <Check className="text-stone-700" size={20} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-green-800">
-                    Rosélle Studio account created
+                  <h3 className="font-semibold text-stone-900">
+                    Account created
                   </h3>
-                  <p className="text-green-600 text-sm mt-1">
-                    Your account was created. Use the link below if you need to sign in later.
+                  <p className="text-stone-600 text-sm mt-1">
+                    Check your email to activate your account if prompted, then{" "}
+                    <Link href="/login" className="font-medium underline">
+                      sign in
+                    </Link>
+                    .
                   </p>
-                  <Link
-                    href="/login"
-                    className="inline-flex items-center gap-2 mt-3 text-green-700 font-medium hover:text-green-800 text-sm"
-                  >
-                    <span>Go to sign in</span>
-                    <ArrowRight size={16} />
-                  </Link>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Shopify Error */}
           {shopifyError && (
             <div className="m-6 p-4 bg-red-50 border border-red-200 rounded-xl animate-fadeIn">
               <div className="flex items-start gap-3">
                 <AlertCircle className="text-red-500 mt-0.5" size={20} />
                 <div>
                   <h3 className="font-semibold text-red-800">
-                    Registration Issue
+                    Registration issue
                   </h3>
                   <p className="text-red-600 text-sm">{shopifyError}</p>
                 </div>
@@ -183,98 +180,135 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* Main content */}
           <div className="p-8">
             {!success && (
               <>
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-stone-100 to-amber-100 rounded-full mb-4 border border-stone-200">
-                <Flower2 className="text-stone-700" size={32} />
-              </div>
-              <h1 className="text-3xl font-bold text-stone-800 mb-2">
-                Create Account
-              </h1>
-              <p className="text-stone-600 text-sm">
-                Enter your name and email. We&apos;ll create your account and sign you in.
-              </p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium text-stone-800 mb-2">
-                  Name
-                </label>
-                <div className="relative">
-                  <User
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
-                    size={18}
-                  />
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800"
-                    placeholder="Your name"
-                  />
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-stone-100 to-amber-100 rounded-full mb-4 border border-stone-200">
+                    <Flower2 className="text-stone-700" size={32} />
+                  </div>
+                  <h1 className="text-3xl font-bold text-stone-800 mb-2">
+                    Create account
+                  </h1>
+                  <p className="text-stone-600 text-sm">
+                    Enter your name, email, and a password to get started.
+                  </p>
                 </div>
-              </div>
 
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-stone-800 mb-2">
-                  Email *
-                </label>
-                <div className="relative">
-                  <Mail
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
-                    size={18}
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className={`w-full pl-10 pr-4 py-3 border ${
-                      errors.email ? "border-red-300" : "border-stone-200"
-                    } rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800`}
-                    placeholder="your@email.com"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                )}
-              </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label className="block text-sm font-medium text-stone-800 mb-2">
+                      Name
+                    </label>
+                    <div className="relative">
+                      <User
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
+                        size={18}
+                      />
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        autoComplete="name"
+                        className={`w-full pl-10 pr-4 py-3 border ${
+                          errors.name ? "border-red-300" : "border-stone-200"
+                        } rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800`}
+                        placeholder="Your full name"
+                      />
+                    </div>
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                    )}
+                  </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-4 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all shadow-sm hover:shadow-md font-semibold flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed border border-stone-900"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Creating Account...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Create Account</span>
-                    <ArrowRight size={20} />
-                  </>
-                )}
-              </button>
+                  <div>
+                    <label className="block text-sm font-medium text-stone-800 mb-2">
+                      Email
+                    </label>
+                    <div className="relative">
+                      <Mail
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
+                        size={18}
+                      />
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        autoComplete="email"
+                        className={`w-full pl-10 pr-4 py-3 border ${
+                          errors.email ? "border-red-300" : "border-stone-200"
+                        } rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800`}
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                    )}
+                  </div>
 
-              <p className="text-center text-stone-600 text-sm mt-4">
-                Already have an account?{" "}
-                <Link href="/login" className="text-stone-800 font-medium hover:underline">
-                  Sign in
-                </Link>
-              </p>
-            </form>
+                  <div>
+                    <label className="block text-sm font-medium text-stone-800 mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400"
+                        size={18}
+                      />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        autoComplete="new-password"
+                        className={`w-full pl-10 pr-12 py-3 border ${
+                          errors.password ? "border-red-300" : "border-stone-200"
+                        } rounded-xl focus:ring-2 focus:ring-stone-300 focus:border-transparent text-stone-800`}
+                        placeholder={`At least ${MIN_PASSWORD} characters`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-stone-400 hover:text-stone-600"
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-4 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all shadow-sm hover:shadow-md font-semibold flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed border border-stone-900"
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Creating account...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Create account</span>
+                        <ArrowRight size={20} />
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-center text-stone-600 text-sm">
+                    Already have an account?{" "}
+                    <Link
+                      href="/login"
+                      className="text-stone-800 font-medium hover:underline"
+                    >
+                      Sign in
+                    </Link>
+                  </p>
+                </form>
               </>
             )}
           </div>

@@ -1,10 +1,10 @@
 export const metadata = {
-  title: "Contact Us | Artificial Flowers Lahore – Roselle Studio",
+  title: "Contact Us | Tara Kids — Premium Kids Fashion Pakistan",
   description:
-    "Contact Roselle Studio Lahore for artificial flowers, bouquets, wholesale orders & decoration. Visit or call in Lahore, Pakistan.",
+    "Contact Tara Kids for orders, custom designs, and inquiries. Premium kids wedding and function wear. Lahore, Pakistan.",
   openGraph: {
-    title: "Contact Roselle Studio | Artificial Flowers Lahore, Pakistan",
-    description: "Get in touch for orders, wholesale & decoration inquiries.",
+    title: "Contact Tara Kids | Premium Kids Fashion Pakistan",
+    description: "Get in touch for orders and premium kids fashion inquiries.",
     url: "/contact",
   },
 };

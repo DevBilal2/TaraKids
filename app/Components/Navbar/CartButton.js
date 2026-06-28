@@ -11,7 +11,7 @@ const CartButton = () => {
       type="button"
       onClick={toggleCart}
       aria-label="Open shopping cart"
-      className="relative flex min-h-11 min-w-11 items-center justify-center rounded-full p-2 touch-manipulation transition-colors hover:bg-rose-50"
+      className="relative flex min-h-11 min-w-11 items-center justify-center rounded-full p-2 touch-manipulation transition-colors hover:bg-stone-100"
     >
       <ShoppingCart className="text-black" size={20} />
       {getCartCount() > 0 && (

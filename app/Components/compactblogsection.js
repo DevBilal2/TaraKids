@@ -40,8 +40,8 @@ const CompactBlogSection = async ({ showTitle = true, limit = 3, blogHandle = "e
           <div className="flex items-center justify-between mb-8">
             <div>
               <div className="inline-flex items-center gap-2 mb-2">
-                <BookOpen size={18} className="text-amber-600" />
-                <span className="text-sm font-medium text-amber-600 uppercase tracking-wider">
+                <BookOpen size={18} className="text-stone-400" />
+                <span className="text-sm font-medium text-stone-400 uppercase tracking-wider">
                   Latest Articles
                 </span>
               </div>

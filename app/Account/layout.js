@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "My Account | Roselle Studio Lahore",
-  description: "Manage your account, orders and profile. Roselle Studio – artificial flowers Lahore.",
+  title: "My Account | Tara Kids",
+  description: "Manage your account, orders and profile. Tara Kids — premium kids fashion Pakistan.",
   robots: { index: false, follow: true },
 };
 

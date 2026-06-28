@@ -5,8 +5,8 @@ export default function TestimonialCard({ testimonial }) {
     <div className="h-full min-h-[380px] bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-stone-200 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col">
       {/* Quote Icon */}
       <div className="mb-4">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-stone-100 to-amber-100 flex items-center justify-center">
-          <Quote className="text-amber-600" size={20} />
+        <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center">
+          <Quote className="text-stone-400" size={20} />
         </div>
       </div>
 
@@ -24,8 +24,8 @@ export default function TestimonialCard({ testimonial }) {
               size={18}
               className={`${
                 i < testimonial.rating
-                  ? "fill-amber-500 text-amber-500"
-                  : "fill-amber-100 text-amber-200"
+                  ? "fill-stone-900 text-stone-900"
+                  : "fill-stone-200 text-stone-200"
               }`}
             />
           ))}

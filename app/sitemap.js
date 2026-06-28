@@ -4,8 +4,8 @@ import {
   fetchShopifyBlogArticles,
 } from "./lib/shopify";
 
-const BLOG_HANDLE = "elor-scents-blog";
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.roselle.com.pk";
+const BLOG_HANDLE = "news";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tarakids.com.pk";
 
 export default async function sitemap() {
   const staticRoutes = [

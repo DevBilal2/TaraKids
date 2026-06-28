@@ -26,7 +26,7 @@ export default async function CollectionsSection() {
             Featured Collections
           </h2>
           <p className="text-stone-600 text-xl max-w-3xl mx-auto">
-            Explore our most beautiful floral collections
+            Premium kids wedding wear, event suits & girls dresses — crafted for your little ones in Lahore, Pakistan
           </p>
         </div>
 

@@ -175,8 +175,8 @@ export async function fetchShopifyProducts(
         variantId, // for Shopify order creation (GID, e.g. gid://shopify/ProductVariant/123)
         Heading: edge.node.title, // Your app expects "Heading"
         description: edge.node.description,
-        price: `$${edge.node.priceRange?.minVariantPrice?.amount || "0"}`,
-        currency: edge.node.priceRange?.minVariantPrice?.currencyCode || "USD",
+        price: edge.node.priceRange?.minVariantPrice?.amount || "0",
+        currency: edge.node.priceRange?.minVariantPrice?.currencyCode || "PKR",
         tags: edge.node.tags || [],
         inStock: edge.node.totalInventory > 0,
         image: primaryImage,
@@ -246,7 +246,7 @@ export async function createOrder(orderData) {
     const orderPayload = {
       order: {
         email:
-          orderData.contact.email || `order-${Date.now()}@rosellestudio.com`,
+          orderData.contact.email || `order-${Date.now()}@tarakids.com.pk`,
         phone: orderData.contact.phone,
         line_items: lineItems,
         shipping_address: shippingAddress,
@@ -343,7 +343,7 @@ export async function createSimpleOrder(
         first_name: customerInfo.firstName,
         last_name: customerInfo.lastName || "",
         email:
-          customerInfo.email || `customer-${Date.now()}@flowersheavenly.com`,
+          customerInfo.email || `customer-${Date.now()}@tarakids.com.pk`,
         phone: customerInfo.phone,
       },
       shipping_address: {
@@ -765,6 +765,70 @@ export async function customerRecover(email) {
     throw new Error(errors.map((e) => e.message).join(", "));
   }
   return true;
+}
+
+/**
+ * Complete password reset from email link (Storefront API).
+ * @param {string} customerNumericId - Numeric ID from URL path (e.g. 8824960516251)
+ * @param {string} resetToken - Token from URL path
+ * @param {string} password - New password
+ */
+export async function customerResetPassword(customerNumericId, resetToken, password) {
+  if (!SHOPIFY_STORE_DOMAIN || !SHOPIFY_STOREFRONT_TOKEN) {
+    throw new Error("Shopify API credentials not configured");
+  }
+  const id = String(customerNumericId).startsWith("gid://")
+    ? customerNumericId
+    : `gid://shopify/Customer/${customerNumericId}`;
+  const mutation = `
+    mutation customerReset($id: ID!, $input: CustomerResetInput!) {
+      customerReset(id: $id, input: $input) {
+        customer {
+          id
+          email
+          firstName
+          lastName
+        }
+        customerAccessToken {
+          accessToken
+          expiresAt
+        }
+        customerUserErrors {
+          code
+          field
+          message
+        }
+      }
+    }
+  `;
+  const response = await fetch(
+    `https://${SHOPIFY_STORE_DOMAIN}/api/2024-01/graphql.json`,
+    {
+      method: "POST",
+      headers: storefrontHeaders,
+      body: JSON.stringify({
+        query: mutation,
+        variables: {
+          id,
+          input: { resetToken, password },
+        },
+      }),
+    }
+  );
+  const result = await response.json();
+  if (result.errors) {
+    throw new Error(result.errors[0].message);
+  }
+  const payload = result.data?.customerReset;
+  const errors = payload?.customerUserErrors || [];
+  if (errors.length > 0) {
+    throw new Error(errors.map((e) => e.message).join(", "));
+  }
+  const token = payload?.customerAccessToken;
+  if (!token?.accessToken) {
+    throw new Error("Password was not updated. Please request a new reset link.");
+  }
+  return token;
 }
 
 /** Update customer profile (firstName, lastName, phone). Requires accessToken. */
@@ -1330,7 +1394,7 @@ export async function fetchShopifyBlogArticles(blogHandle = "news", first = 50) 
         title: article.title,
         excerpt: article.excerpt || article.excerptHtml?.replace(/<[^>]*>/g, "") || "",
         content: article.contentHtml || article.content || "",
-        author: article.author?.name || "Roselle Studio",
+        author: article.author?.name || "Tara Kids",
         authorRole: "Editor",
         date: formattedDate,
         readTime: `${readTime} min read`,
@@ -1436,7 +1500,7 @@ export async function fetchShopifyArticleByHandle(blogHandle, articleHandle) {
       title: article.title,
       excerpt: article.excerpt || article.excerptHtml?.replace(/<[^>]*>/g, "") || "",
       content: article.contentHtml || article.content || "",
-      author: article.author?.name || "Roselle Studio",
+      author: article.author?.name || "Tara Kids",
       authorRole: "Editor",
       date: formattedDate,
       readTime: `${readTime} min read`,

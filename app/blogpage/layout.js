@@ -1,10 +1,10 @@
 export const metadata = {
-  title: "Blog | Artificial Flowers, Decor Tips & Ideas | Roselle Studio Lahore",
+  title: "Blog | Kids Fashion, Style Tips & Inspiration | Tara Kids",
   description:
-    "Tips on artificial flowers, bouquets, home decor & styling. Roselle Studio blog – Lahore, Pakistan.",
+    "Tips on kids fashion, wedding outfit ideas, and styling inspiration. Tara Kids blog — Pakistan.",
   openGraph: {
-    title: "Blog | Roselle Studio – Artificial Flowers & Decor Lahore",
-    description: "Ideas and tips for artificial flowers, bouquets and home decoration.",
+    title: "Blog | Tara Kids — Premium Kids Fashion Pakistan",
+    description: "Kids fashion ideas, wedding outfit inspiration and styling tips.",
     url: "/blogpage",
   },
 };

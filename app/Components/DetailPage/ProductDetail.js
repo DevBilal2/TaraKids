@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
+import { formatMoney, formatProductPrice } from "@/app/lib/formatProductPrice";
 import {
   ShoppingBag,
   Heart,
@@ -35,6 +36,15 @@ export default function ProductDetail({ product }) {
   const images = product.images || [product.image];
 
   const reviews = [];
+
+  const displayPrice =
+    product.priceFormatted ||
+    formatProductPrice({ price: product.price, currency: product.currency });
+  const displayCompareAt =
+    product.compareAtFormatted ||
+    (product.compareAtAmount
+      ? formatMoney(product.compareAtAmount, product.currency || "PKR")
+      : null);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -111,7 +121,7 @@ export default function ProductDetail({ product }) {
                         </span>
                       )}
                       {product.bestSeller && (
-                        <span className="rounded-full border border-amber-700 bg-amber-600 px-3 py-1 text-xs font-medium text-white">
+                        <span className="rounded-full border border-stone-900 bg-stone-900 px-3 py-1 text-xs font-medium text-white">
                           Best Seller
                         </span>
                       )}
@@ -173,7 +183,7 @@ export default function ProductDetail({ product }) {
                   </span>
                 )}
                 {product.bestSeller && (
-                  <span className="rounded-full border border-amber-700 bg-amber-600 px-3 py-1 text-xs font-medium text-white">
+                  <span className="rounded-full border border-stone-900 bg-stone-900 px-3 py-1 text-xs font-medium text-white">
                     Best Seller
                   </span>
                 )}
@@ -247,7 +257,7 @@ export default function ProductDetail({ product }) {
             {/* Brand & Category */}
             <div className="mb-4">
               <span className="text-sm font-medium text-stone-600 uppercase tracking-wider">
-                {product.brand || "Roselle Studio"}
+                {product.brand || "Tara Kids"}
               </span>
               <div className="flex items-center gap-2 mt-1">
                 {product.tags?.slice(0, 3).map((tag, index) => (
@@ -271,7 +281,7 @@ export default function ProductDetail({ product }) {
               {product.inStock ? (
                 <span className="text-emerald-600 font-medium">In Stock</span>
               ) : (
-                <span className="text-amber-600 font-medium">Out of Stock</span>
+                <span className="text-stone-500 font-medium">Out of Stock</span>
               )}
             </div>
 
@@ -279,12 +289,12 @@ export default function ProductDetail({ product }) {
             <div className="mb-6">
               <div className="flex items-baseline gap-3">
                 <span className="text-4xl md:text-5xl font-bold text-stone-800">
-                  {product.price}
+                  {displayPrice}
                 </span>
-                {product.originalPrice && (
+                {displayCompareAt && (
                   <>
                     <span className="text-xl text-stone-400 line-through">
-                      {product.originalPrice}
+                      {displayCompareAt}
                     </span>
                     <span className="px-3 py-1 bg-stone-100 text-stone-700 text-sm font-medium rounded-full border border-stone-200">
                       Save {product.discount || "20"}%
@@ -376,7 +386,7 @@ export default function ProductDetail({ product }) {
                 className="w-full py-4 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all duration-300 shadow-sm hover:shadow-md font-semibold flex items-center justify-center gap-3 border border-stone-900"
               >
                 <ShoppingBag size={22} />
-                <span>Add to Cart • {product.price}</span>
+                <span>Add to Cart • {displayPrice}</span>
               </button>
             </div>
 
@@ -459,7 +469,7 @@ export default function ProductDetail({ product }) {
                 <p className="text-stone-700 leading-relaxed text-lg">
                   {product.fullDescription ||
                     product.description ||
-                    "This exquisite floral arrangement is handcrafted by our master florists using only the freshest, most vibrant blooms. Each flower is carefully selected for its beauty, fragrance, and longevity. Perfect for special occasions, gifts, or adding elegance to your home decor."}
+                    "This exquisite piece is crafted with premium quality fabrics and meticulous attention to detail. Designed for life's most special moments — weddings, Eid, and grand celebrations — it ensures your child looks and feels extraordinary."}
                 </p>
               </div>
 
@@ -484,7 +494,7 @@ export default function ProductDetail({ product }) {
                         size={20}
                       />
                       <span className="text-stone-700">
-                        Long-lasting freshness guarantee
+                        Premium quality fabric & stitching
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -493,7 +503,7 @@ export default function ProductDetail({ product }) {
                         size={20}
                       />
                       <span className="text-stone-700">
-                        Eco-friendly biodegradable packaging
+                        Carefully packed & delivered across Pakistan
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -502,7 +512,7 @@ export default function ProductDetail({ product }) {
                         size={20}
                       />
                       <span className="text-stone-700">
-                        Expert floral arrangement design
+                        Designed for weddings, functions & events
                       </span>
                     </li>
                   </ul>
@@ -579,7 +589,7 @@ export default function ProductDetail({ product }) {
                                       size={14}
                                       className={`${
                                         i < review.rating
-                                          ? "fill-amber-400 text-amber-400"
+                                          ? "fill-stone-900 text-stone-900"
                                           : "text-stone-300"
                                       }`}
                                     />

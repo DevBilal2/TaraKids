@@ -14,6 +14,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  formatMoney,
+  FREE_SHIPPING_PKR_THRESHOLD,
+  FLAT_SHIPPING_PKR,
+} from "../../lib/formatProductPrice";
 
 const CartSidebar = () => {
   const {
@@ -33,8 +38,9 @@ const CartSidebar = () => {
   }, []);
 
   const subtotal = getCartTotal();
-  const shipping = subtotal > 100 ? 0 : 9.99;
-  const tax = subtotal * 0.08;
+  const shipping =
+    subtotal >= FREE_SHIPPING_PKR_THRESHOLD ? 0 : FLAT_SHIPPING_PKR;
+  const tax = 0;
   const total = subtotal + shipping + tax;
 
   useEffect(() => {
@@ -104,7 +110,7 @@ const CartSidebar = () => {
                 Your cart is empty
               </h3>
               <p className="text-stone-600 mb-6">
-                Add some beautiful flowers to get started!
+                Add beautiful pieces to your cart to get started!
               </p>
               <button
                 onClick={closeCart}
@@ -191,7 +197,10 @@ const CartSidebar = () => {
                         </button>
                       </div>
                       <span className="font-bold text-stone-700 text-sm md:text-base">
-                        {(item.price * item.quantity).toFixed(2)}
+                        {formatMoney(
+                          item.price * item.quantity,
+                          item.currency || "PKR"
+                        )}
                       </span>
                     </div>
                   </div>
@@ -220,7 +229,7 @@ const CartSidebar = () => {
                   Subtotal
                 </span>
                 <span className="font-medium text-stone-800 text-sm md:text-base">
-                  {subtotal.toFixed(2)}
+                  {formatMoney(subtotal, "PKR")}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -232,13 +241,15 @@ const CartSidebar = () => {
                     shipping === 0 ? "text-emerald-600" : "text-stone-800"
                   }`}
                 >
-                  {shipping === 0 ? "FREE" : `${shipping.toFixed(2)}`}
+                  {shipping === 0
+                    ? "FREE"
+                    : formatMoney(shipping, "PKR")}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-stone-700 text-sm md:text-base">Tax</span>
                 <span className="font-medium text-stone-800 text-sm md:text-base">
-                  {tax.toFixed(2)}
+                  {tax === 0 ? "—" : formatMoney(tax, "PKR")}
                 </span>
               </div>
               <div className="border-t border-stone-200 pt-3 mt-2">
@@ -247,24 +258,30 @@ const CartSidebar = () => {
                     Total
                   </span>
                   <span className="text-xl md:text-2xl font-bold text-stone-800">
-                    {total.toFixed(2)}
+                    {formatMoney(total, "PKR")}
                   </span>
                 </div>
               </div>
 
               {/* Free Shipping Progress */}
-              {subtotal < 100 && (
-                <div className="mt-3 p-3 bg-amber-50 rounded-xl border border-amber-100">
+              {subtotal < FREE_SHIPPING_PKR_THRESHOLD && (
+                <div className="mt-3 p-3 bg-stone-50 rounded-xl border border-stone-100">
                   <div className="flex items-center gap-2 mb-2">
-                    <Package className="text-amber-600" size={14} />
-                    <span className="text-xs md:text-sm font-medium text-amber-800">
-                      {(100 - subtotal).toFixed(2)} away from free shipping!
+                    <Package className="text-stone-500" size={14} />
+                    <span className="text-xs md:text-sm font-medium text-stone-700">
+                      {formatMoney(
+                        Math.max(0, FREE_SHIPPING_PKR_THRESHOLD - subtotal),
+                        "PKR"
+                      )}{" "}
+                      away from free shipping!
                     </span>
                   </div>
-                  <div className="h-1.5 bg-amber-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-stone-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-amber-500 rounded-full"
-                      style={{ width: `${(subtotal / 100) * 100}%` }}
+                      className="h-full bg-stone-800 rounded-full"
+                      style={{
+                        width: `${Math.min(100, (subtotal / FREE_SHIPPING_PKR_THRESHOLD) * 100)}%`,
+                      }}
                     />
                   </div>
                 </div>

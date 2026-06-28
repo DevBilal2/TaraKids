@@ -23,14 +23,14 @@ export default function SlidingAnimation({ collections, direction = "left" }) {
               }
               className="group block"
             >
-              <div className="px-8 py-4 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-rose-200 hover:border-rose-300 hover:-translate-y-1">
+              <div className="px-8 py-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-stone-100 hover:border-stone-300 hover:-translate-y-1">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">🌸</span>
-                  <h3 className="text-lg font-semibold text-rose-800 group-hover:text-rose-600 transition-colors">
+                  <span className="text-lg text-stone-400">✦</span>
+                  <h3 className="text-base font-semibold text-stone-800 group-hover:text-stone-900 transition-colors tracking-wide">
                     {collection.title}
                   </h3>
                 </div>
-                <div className="mt-2 text-sm text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-2 text-xs text-stone-400 opacity-0 group-hover:opacity-100 transition-opacity tracking-wider uppercase">
                   Shop collection →
                 </div>
               </div>

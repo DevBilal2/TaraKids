@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import HomeSection from "./Components/HomeSection/HomeSection";
+import AboutSection from "./Components/AboutSection/AboutSection";
 // import Contact from "./contact/Contact";
 import NavBarScrollEffect from "./Components/Navbar/NavBarScrollEffect";
 // import CategoryNav from "./Components/CatogaryNav";
@@ -75,13 +76,25 @@ const Testimonials = dynamic(() => import("./Components/Testimonials"), {
 });
 
 export const metadata = {
-  title: "Artificial Flowers Lahore | Bouquets, Bunches, Decor & Wholesale Pakistan",
+  title: "Tara Kids | Premium Kids Wedding & Function Wear Lahore Pakistan",
   description:
-    "Roselle Studio Lahore – best artificial flowers, bouquets, bunches, decoration pieces & balloons in Pakistan. Shop online or order wholesale. Delivery across Lahore & Pakistan.",
+    "Tara Kids Lahore — Pakistan's premier kids fashion brand. Shop luxury wedding dresses, kids suits, girls party dresses & function outfits. Premium kids wedding wear delivered across Pakistan.",
+  keywords: [
+    "kids wedding dress Lahore",
+    "kids wedding wear Pakistan",
+    "kids suits Pakistan",
+    "girls party dress Lahore",
+    "children wedding outfit Pakistan",
+    "kids sherwani Lahore",
+    "kids lehenga Pakistan",
+    "kids function dress Lahore",
+    "kids event wear Pakistan",
+    "Tara Kids Lahore",
+  ],
   openGraph: {
-    title: "Artificial Flowers Lahore | Bouquets, Decor & Wholesale | Roselle Studio",
+    title: "Tara Kids | Premium Kids Wedding & Function Wear Lahore",
     description:
-      "Shop artificial flower bouquets, bunches, home decor & balloons. Wholesale artificial flowers in Lahore & Pakistan.",
+      "Luxury wedding dresses, kids suits & girls party wear for children in Lahore, Pakistan. Premium designs for your little ones' most special moments.",
     url: "/",
   },
 };
@@ -98,6 +111,7 @@ export default function Home() {
           <CompaniesSection />
         </Suspense>
         <Services />
+        <AboutSection />
         <CompactBlogSection />
         {/* <Contact /> */}
         <Testimonials />

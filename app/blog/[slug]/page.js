@@ -37,19 +37,19 @@ export async function generateMetadata({ params }) {
   const post = await fetchShopifyArticleByHandle(BLOG_HANDLE, slug);
 
   if (!post) {
-    return { title: "Post Not Found | Roselle Studio Lahore" };
+    return { title: "Post Not Found | Tara Kids Lahore" };
   }
 
   const description =
     (post.excerpt || "").replace(/<[^>]*>/g, "").trim().substring(0, 160) ||
-    `${post.title} – Roselle Studio blog. Artificial flowers & decor tips, Lahore Pakistan.`;
+    `${post.title} – Tara Kids blog. Kids fashion tips and inspiration from Tara Kids, Pakistan.`;
   const imageUrl = post.image;
 
   return {
-    title: `${post.title} | Roselle Studio Blog`,
+    title: `${post.title} | Tara Kids Blog`,
     description: description,
     openGraph: {
-      title: `${post.title} | Roselle Studio Lahore Blog`,
+      title: `${post.title} | Tara Kids Lahore Blog`,
       description: description,
       type: "article",
       images: imageUrl
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${post.title} | Roselle Studio`,
+      title: `${post.title} | Tara Kids`,
       description: description,
     },
     alternates: { canonical: `/blog/${slug}` },
@@ -263,7 +263,7 @@ export default async function BlogPostPage({ params }) {
                   Never Miss a Post
                 </h3>
                 <p className="text-sm text-stone-600 mb-4">
-                  Subscribe to our newsletter for weekly floral inspiration
+                  Subscribe for new arrivals, styling tips & kids fashion trends in Pakistan
                 </p>
                 <form className="space-y-3">
                   <input
@@ -292,8 +292,7 @@ export default async function BlogPostPage({ params }) {
                   </div>
                 </div>
                 <p className="text-sm text-stone-700">
-                  Passionate about sharing floral knowledge and helping others
-                  discover the joy of flowers.
+                  Passionate about kids fashion in Pakistan — sharing styling tips, outfit ideas, and the latest trends for little ones.
                 </p>
               </div>
             </div>

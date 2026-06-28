@@ -9,12 +9,11 @@ export default function TypingHeading() {
   const [iconKey, setIconKey] = useState(0);
 
   useEffect(() => {
-    // Changed headings to match floral/business theme
     const headings = [
-      "Create Memories",
-      "Express Love",
-      "Celebrate Moments",
-      "Share Joy",
+      "Dress to Impress",
+      "Wedding Ready",
+      "Event Perfect",
+      "Style Starts Here",
     ];
     const current = headings[index];
     let typingSpeed = isDeleting ? 50 : 100;
@@ -48,11 +47,10 @@ export default function TypingHeading() {
   return (
     <div className="flex items-start justify-start h-20 mt-2">
       <div className="text-4xl sm:text-5xl md:text-6xl font-bold flex">
-        <span className="bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+        <span className="text-stone-900">
           {text}
         </span>
-        <span className="inline-block w-[3px] h-[1em] bg-rose-400 ml-1 animate-pulse" />
-        {/* Optional: Add a floral icon that changes with each heading */}
+        <span className="inline-block w-[3px] h-[1em] bg-stone-900 ml-1 animate-pulse" />
         <span
           key={iconKey}
           className="ml-2 animate-fade-in-scale"
@@ -60,10 +58,10 @@ export default function TypingHeading() {
             animation: 'fadeInScale 0.3s ease-out',
           }}
         >
-          {index === 0 && "🌸"}
-          {index === 1 && "🌺"}
-          {index === 2 && "💐"}
-          {index === 3 && "🌷"}
+          {index === 0 && "👗"}
+          {index === 1 && "✨"}
+          {index === 2 && "🎉"}
+          {index === 3 && "👑"}
         </span>
       </div>
       <style jsx>{`

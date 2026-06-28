@@ -7,7 +7,7 @@ import {
   fetchShopifyCollections,
   fetchShopifyProducts,
 } from "../../lib/shopify";
-import { Flower2, ShoppingBag, ChevronRight } from "lucide-react";
+import { Sparkles, ShoppingBag, ChevronRight } from "lucide-react";
 
 const Products = async () => {
   // Fetch collections from Shopify with timeout to prevent blocking
@@ -25,45 +25,47 @@ const Products = async () => {
       : [
           {
             id: "1",
-            title: "Wedding Collection",
+            title: "Wedding & Nikah Wear",
             handle: "wedding",
-            description: "Elegant arrangements for weddings",
+            description: "Premium kids wedding outfits",
             products: [
               {
                 id: "101",
-                Heading: "Bridal Bouquet",
-                description:
-                  "Custom bridal bouquet with white roses and peonies",
-                price: "$129.99",
-                tags: ["Wedding", "Bridal", "Premium"],
+                Heading: "Boys Sherwani Set",
+                description: "Elegant sherwani with matching trousers for weddings",
+                price: "35000",
+                currency: "PKR",
+                tags: ["Wedding", "Boys", "Premium"],
                 inStock: true,
                 category: "Wedding",
               },
               {
                 id: "102",
-                Heading: "Boutonniere Set",
-                description:
-                  "Matching boutonnieres for the groom and groomsmen",
-                price: "$59.99",
-                tags: ["Wedding", "Groom", "Formal"],
+                Heading: "Girls Lehenga",
+                description: "Embroidered lehenga choli for special occasions",
+                price: "38000",
+                currency: "PKR",
+                tags: ["Wedding", "Girls", "Formal"],
                 inStock: true,
                 category: "Wedding",
               },
               {
                 id: "103",
-                Heading: "Centerpieces",
-                description: "Elegant table centerpieces for reception",
-                price: "$89.99",
-                tags: ["Wedding", "Decor", "Reception"],
+                Heading: "Girls Frock Suit",
+                description: "Formal embroidered frock for weddings and functions",
+                price: "28000",
+                currency: "PKR",
+                tags: ["Wedding", "Girls", "Frock"],
                 inStock: true,
                 category: "Wedding",
               },
               {
                 id: "104",
-                Heading: "Flower Crown",
-                description: "Delicate floral crown for brides",
-                price: "$79.99",
-                tags: ["Wedding", "Bridal", "Accessories"],
+                Heading: "Boys Kurta Pajama",
+                description: "Classic kurta pajama with intricate embroidery",
+                price: "22000",
+                currency: "PKR",
+                tags: ["Wedding", "Boys", "Kurta"],
                 inStock: true,
                 category: "Wedding",
               },
@@ -71,60 +73,64 @@ const Products = async () => {
           },
           {
             id: "2",
-            title: "Seasonal Blooms",
-            handle: "seasonal",
-            description: "Fresh seasonal flowers",
+            title: "Eid Collection",
+            handle: "eid",
+            description: "Festive Eid wear for children",
             products: [
               {
                 id: "201",
-                Heading: "Spring Tulips",
-                description: "Bright tulip arrangement for spring",
-                price: "$49.99",
-                tags: ["Seasonal", "Spring", "Fresh"],
+                Heading: "Girls Eid Frock",
+                description: "Elegant printed frock perfect for Eid celebrations",
+                price: "18000",
+                currency: "PKR",
+                tags: ["Eid", "Girls", "Festive"],
                 inStock: true,
-                category: "Seasonal",
+                category: "Eid",
               },
               {
                 id: "202",
-                Heading: "Autumn Sunflowers",
-                description: "Cheerful sunflower bouquet",
-                price: "$39.99",
-                tags: ["Seasonal", "Autumn", "Sunflowers"],
+                Heading: "Boys Eid Kurta",
+                description: "Stylish kurta set for Eid festivities",
+                price: "15000",
+                currency: "PKR",
+                tags: ["Eid", "Boys", "Festive"],
                 inStock: true,
-                category: "Seasonal",
+                category: "Eid",
               },
               {
                 id: "203",
-                Heading: "Winter Poinsettias",
-                description: "Festive winter arrangement",
-                price: "$59.99",
-                tags: ["Seasonal", "Winter", "Holiday"],
+                Heading: "Girls Sharara Set",
+                description: "Festive sharara with embroidered dupatta",
+                price: "22000",
+                currency: "PKR",
+                tags: ["Eid", "Girls", "Sharara"],
                 inStock: true,
-                category: "Seasonal",
+                category: "Eid",
               },
               {
                 id: "204",
-                Heading: "Summer Lilies",
-                description: "Fresh summer lily bouquet",
-                price: "$44.99",
-                tags: ["Seasonal", "Summer", "Lilies"],
+                Heading: "Boys Waistcoat Set",
+                description: "Smart waistcoat with matching shirt and trousers",
+                price: "19000",
+                currency: "PKR",
+                tags: ["Eid", "Boys", "Formal"],
                 inStock: true,
-                category: "Seasonal",
+                category: "Eid",
               },
             ],
           },
           {
             id: "3",
-            title: "Premium Arrangements",
+            title: "Premium Formal",
             handle: "premium",
-            description: "Premium floral designs",
+            description: "Luxury formal wear for children",
             products: [],
           },
           {
             id: "4",
-            title: "Home Decor",
-            handle: "home-decor",
-            description: "Floral decor for living spaces",
+            title: "Custom Orders",
+            handle: "custom",
+            description: "Bespoke designs for your child",
             products: [],
           },
         ];
@@ -160,13 +166,13 @@ const Products = async () => {
     return (
       <div
         id="products"
-        className="scroll-mt-16 py-20 bg-gradient-to-b from-stone-50 to-white px-4"
+        className="scroll-mt-16 py-20 bg-white px-4"
       >
         <div className="container mx-auto">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full border border-stone-200 shadow-sm mb-6">
-              <Flower2 size={20} className="text-amber-600" />
-              <span className="text-sm font-medium text-stone-700">
+              <Sparkles size={20} className="text-stone-700" />
+              <span className="text-sm font-medium text-stone-700 tracking-wide">
                 Featured Collections
               </span>
             </div>
@@ -174,20 +180,18 @@ const Products = async () => {
             <h2 className="text-4xl md:text-5xl font-serif font-bold text-stone-900 mb-6">
               Our Featured Collections
             </h2>
-            <p className="text-stone-600 text-lg">
-              Discover beautiful floral arrangements from our curated
-              collections
+            <p className="text-stone-500 text-lg">
+              Discover our curated collections of premium kids wedding and function wear
             </p>
           </div>
 
           <div className="py-20 text-center bg-stone-50/50 rounded-2xl border border-stone-200">
-            <div className="text-8xl mb-6 opacity-30">🌸</div>
+            <div className="text-8xl mb-6 opacity-20">✦</div>
             <h3 className="text-2xl font-bold text-stone-700 mb-4">
               No Products Available
             </h3>
-            <p className="text-stone-600 max-w-md mx-auto mb-8">
-              Our collections are currently being updated. Please check back
-              soon!
+            <p className="text-stone-500 max-w-md mx-auto mb-8">
+              Our collections are currently being updated. Please check back soon!
             </p>
             <Link
               href="/"
@@ -205,13 +209,13 @@ const Products = async () => {
   return (
     <div
       id="products"
-      className="scroll-mt-16 py-20 bg-gradient-to-b from-stone-50 to-white px-4"
+      className="scroll-mt-16 py-20 bg-white px-4"
     >
       <div className="container mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full border border-stone-200 shadow-sm mb-6">
-            <Flower2 size={20} className="text-amber-600" />
+            <Sparkles size={20} className="text-stone-700" />
             <span className="text-sm font-medium text-stone-700">
               Featured Collections
             </span>
@@ -223,8 +227,8 @@ const Products = async () => {
           >
             Our Featured Collections
           </SlideInAnimation>
-          <SlideInAnimation delay={800} className="text-stone-600 text-lg">
-            Discover beautiful floral arrangements from our curated collections
+          <SlideInAnimation delay={800} className="text-stone-500 text-lg">
+            Discover our curated collections of premium kids wedding and function wear
           </SlideInAnimation>
         </div>
 

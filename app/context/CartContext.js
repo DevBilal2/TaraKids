@@ -12,7 +12,7 @@ export function CartProvider({ children }) {
   useEffect(() => {
     const loadCart = () => {
       try {
-        const savedCart = localStorage.getItem("flowerShopCart");
+        const savedCart = localStorage.getItem("taraKidsCart");
         if (savedCart) {
           const parsed = JSON.parse(savedCart);
           setCartItems(Array.isArray(parsed) ? parsed : []);
@@ -38,14 +38,14 @@ export function CartProvider({ children }) {
     if (!hasLoadedFromStorage.current) return;
     if (cartItems.length === 0) {
       try {
-        localStorage.removeItem("flowerShopCart");
+        localStorage.removeItem("taraKidsCart");
       } catch (e) {}
       return;
     }
 
     const saveCart = () => {
       try {
-        localStorage.setItem("flowerShopCart", JSON.stringify(cartItems));
+        localStorage.setItem("taraKidsCart", JSON.stringify(cartItems));
       } catch (error) {
         console.error("Error saving cart:", error);
       }
@@ -106,6 +106,7 @@ export function CartProvider({ children }) {
               typeof product.price === "string"
                 ? parseFloat(product.price.replace(/[^0-9.]/g, ""))
                 : Number(product.price) || 0,
+            currency: product.currency || "PKR",
             quantity: quantity,
             color,
             size,

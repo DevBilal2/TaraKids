@@ -1,306 +1,257 @@
 "use client";
-import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Send, CheckCircle } from "lucide-react";
 
-const Contact = () => {
-  const [status, setStatus] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+export default function ContactPage() {
+  const [status, setStatus] = useState("idle");
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
 
-  const handleSubmit = async (e) => {
+  function handleChange(e) {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    setStatus(null);
-    setIsLoading(true);
-    const form = e.target;
-    const formData = new FormData(form);
-    const accessKey =
-      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
-      "4f59a8ec-acc5-4d94-b696-dd01d7af89b4";
-    formData.append("access_key", accessKey);
-    formData.append(
-      "subject",
-      `Contact: ${formData.get("firstName") || ""} ${formData.get("lastName") || ""}`.trim() || "Rosélle Studio contact form"
-    );
+    setStatus("loading");
+
+    const body = new FormData();
+    body.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "");
+    body.append("name", formData.name);
+    body.append("email", formData.email);
+    body.append("phone", formData.phone);
+    body.append("message", formData.message);
+    body.append("subject", "New Enquiry — Tara Kids");
+
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body });
       const data = await res.json();
       if (data.success) {
         setStatus("success");
-        form.reset();
+        setFormData({ name: "", email: "", phone: "", message: "" });
       } else {
         setStatus("error");
       }
     } catch {
       setStatus("error");
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }
 
   return (
-    <div
-      id="contact"
-      className="scroll-mt-16 w-full min-h-screen bg-gradient-to-b from-stone-50 to-white text-stone-800 flex items-center justify-center px-5 py-16 lg:px-8 xl:px-[8%]"
-    >
-      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Left Panel */}
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-100 rounded-full mb-4 border border-stone-200">
-              <span className="text-lg">💌</span>
-              <span className="text-sm font-medium text-stone-700 uppercase tracking-wider">
-                Get in Touch
-              </span>
-            </div>
+    <main className="min-h-screen bg-white">
+      {/* Hero strip */}
+      <div className="border-b border-stone-100 bg-stone-50 px-6 py-16 text-center sm:px-8">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-stone-400">
+          Tara Kids · Premium Children&apos;s Fashion
+        </p>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">
+          Let&apos;s Connect
+        </h1>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-stone-500">
+          For orders, custom designs, wedding &amp; function wear enquiries, or
+          wholesale — we&apos;re here to help.
+        </p>
+      </div>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-stone-800">
-              Let&apos;s Connect
-            </h2>
+      <div className="mx-auto max-w-5xl px-6 py-16 sm:px-8 xl:px-0">
+        <div className="grid gap-16 lg:grid-cols-[1fr_380px]">
 
-            <p className="text-lg text-stone-600">
-              Have questions about our floral arrangements? Need a custom
-              bouquet for a special occasion? We&apos;re here to help bring your
-              floral vision to life.
+          {/* ── Form ── */}
+          <div>
+            <p className="mb-8 text-sm font-bold uppercase tracking-[0.2em] text-stone-700">
+              Send us a message
             </p>
-          </div>
 
-          {/* Features */}
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-stone-200">
-              <CheckCircle
-                className="text-emerald-600 mt-0.5 flex-shrink-0"
-                size={20}
-              />
-              <div>
-                <h4 className="font-semibold text-stone-800">
-                  Fresh Daily Delivery
-                </h4>
-                <p className="text-sm text-stone-600">
-                  Hand-delivered fresh blooms
-                </p>
+            {status === "success" ? (
+              <div className="flex flex-col items-center justify-center gap-5 rounded-3xl border border-stone-100 bg-stone-50 py-24 text-center">
+                <CheckCircle size={36} className="text-stone-800" strokeWidth={1.5} />
+                <div>
+                  <p className="text-lg font-semibold tracking-tight text-stone-900">
+                    Thank you for reaching out
+                  </p>
+                  <p className="mt-1 text-sm text-stone-500">
+                    Our team will get back to you within 24 hours.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setStatus("idle")}
+                  className="mt-2 text-xs font-semibold uppercase tracking-widest text-stone-500 underline underline-offset-4 hover:text-stone-900"
+                >
+                  Send another message
+                </button>
               </div>
-            </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-7">
+                <div className="grid gap-7 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-stone-700">
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="e.g. Aisha Khan"
+                      className="w-full border-0 border-b-2 border-stone-300 bg-transparent pb-3 pt-1 text-sm font-medium text-stone-900 placeholder-stone-400 outline-none transition-colors focus:border-stone-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-stone-700">
+                      Phone <span className="normal-case font-normal text-stone-400">(optional)</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+92 328 4114902"
+                      className="w-full border-0 border-b-2 border-stone-300 bg-transparent pb-3 pt-1 text-sm font-medium text-stone-900 placeholder-stone-400 outline-none transition-colors focus:border-stone-900"
+                    />
+                  </div>
+                </div>
 
-            <div className="flex items-start gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-stone-200">
-              <CheckCircle
-                className="text-emerald-600 mt-0.5 flex-shrink-0"
-                size={20}
-              />
-              <div>
-                <h4 className="font-semibold text-stone-800">
-                  Custom Arrangements
-                </h4>
-                <p className="text-sm text-stone-600">
-                  Personalized designs just for you
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-stone-200">
-              <CheckCircle
-                className="text-emerald-600 mt-0.5 flex-shrink-0"
-                size={20}
-              />
-              <div>
-                <h4 className="font-semibold text-stone-800">
-                  Same Day Service
-                </h4>
-                <p className="text-sm text-stone-600">Urgent orders welcome</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-6 mt-8">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-stone-800 rounded-full border border-stone-900">
-                <Phone size={20} className="text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-stone-600">Call Us</p>
-                <a href="tel:+923436951448" className="font-semibold text-stone-800 hover:text-amber-600 transition-colors">
-                  +92 343 6951448
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-stone-800 rounded-full border border-stone-900">
-                <Mail size={20} className="text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-stone-600">Email Us</p>
-                <a href="mailto:rosellestudioofficial@gmail.com" className="font-semibold text-stone-800 hover:text-amber-600 transition-colors">
-                  rosellestudioofficial@gmail.com
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-stone-800 rounded-full border border-stone-900">
-                <MapPin size={20} className="text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-stone-600">Based in</p>
-                <p className="font-semibold text-stone-800">
-                  Lahore, Pakistan
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Panel - Form */}
-        <div className="relative">
-          {/* Decorative floral background */}
-          <div className="absolute -top-6 -right-6 text-6xl text-stone-200/30">
-            🌸
-          </div>
-          <div className="absolute -bottom-6 -left-6 text-6xl text-amber-200/30">
-            🌺
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="relative bg-white rounded-2xl p-8 shadow-sm border border-stone-200 space-y-6 z-10"
-          >
-            <div className="text-center mb-2">
-              <h3 className="text-2xl font-bold text-stone-800 mb-2">
-                Send a Message
-              </h3>
-              <p className="text-stone-600">We&apos;ll respond within 24 hours</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">
-                  First Name *
-                </label>
-                <input
-                  name="firstName"
-                  type="text"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300 focus:border-transparent transition-all"
-                  placeholder="Enter your first name"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">
-                  Last Name *
-                </label>
-                <input
-                  name="lastName"
-                  type="text"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300 focus:border-transparent transition-all"
-                  placeholder="Enter your last name"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">
-                Email Address *
-              </label>
-              <input
-                name="email"
-                type="email"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300 focus:border-transparent transition-all"
-                placeholder="your@email.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">
-                What&apos;s your occasion?
-              </label>
-              <select
-                name="occasion"
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-800 focus:outline-none focus:ring-2 focus:ring-stone-300 focus:border-transparent transition-all"
-              >
-                <option value="">Select an occasion</option>
-                <option value="birthday">Birthday</option>
-                <option value="anniversary">Anniversary</option>
-                <option value="wedding">Wedding</option>
-                <option value="sympathy">Sympathy</option>
-                <option value="thankyou">Thank You</option>
-                <option value="justbecause">Just Because</option>
-                <option value="corporate">Corporate Event</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">
-                Your Message *
-              </label>
-              <textarea
-                name="message"
-                rows="4"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300 focus:border-transparent transition-all resize-none"
-                placeholder="Tell us about your floral needs..."
-              />
-            </div>
-
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                required
-                id="terms"
-                className="mt-1 rounded border-stone-300 text-stone-700 focus:ring-stone-300"
-              />
-              <label htmlFor="terms" className="text-sm text-stone-600">
-                I agree to Rosélle Studio&apos;s{" "}
-                <span className="text-stone-700 font-medium underline">
-                  Terms of Service
-                </span>{" "}
-                and{" "}
-                <span className="text-stone-700 font-medium underline">
-                  Privacy Policy
-                </span>
-              </label>
-            </div>
-
-            {status === "success" && (
-              <p className="text-center py-3 px-4 bg-emerald-50 text-emerald-800 rounded-xl text-sm border border-emerald-200">
-                Message sent! We&apos;ll get back to you soon.
-              </p>
-            )}
-            {status === "error" && (
-              <p className="text-center py-3 px-4 bg-red-50 text-red-800 rounded-xl text-sm border border-red-200">
-                Something went wrong. Please try again or email us directly.
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-4 bg-stone-800 text-white font-semibold rounded-xl hover:bg-stone-900 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 group border border-stone-900 disabled:opacity-70 disabled:pointer-events-none"
-            >
-              {isLoading ? (
-                <span>Sending...</span>
-              ) : (
-                <>
-                  <Send
-                    size={20}
-                    className="group-hover:translate-x-1 transition-transform"
+                <div>
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-stone-700">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    className="w-full border-0 border-b-2 border-stone-300 bg-transparent pb-3 pt-1 text-sm font-medium text-stone-900 placeholder-stone-400 outline-none transition-colors focus:border-stone-900"
                   />
-                  <span>Send Message</span>
-                </>
-              )}
-            </button>
+                </div>
 
-            <p className="text-center text-sm text-stone-500 mt-4">
-              🌸 We&apos;ll respond in your inbox soon!
-            </p>
-          </form>
+                <div>
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-[0.15em] text-stone-700">
+                    Your Enquiry
+                  </label>
+                  <textarea
+                    name="message"
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us about the occasion, age of the child, preferred style, or any custom requirements..."
+                    className="w-full resize-none border-0 border-b-2 border-stone-300 bg-transparent pb-3 pt-1 text-sm font-medium text-stone-900 placeholder-stone-400 outline-none transition-colors focus:border-stone-900"
+                  />
+                </div>
+
+                {status === "error" && (
+                  <p className="text-xs text-red-500">
+                    Something went wrong. Please email us directly at tarakidswearofficial@gmail.com
+                  </p>
+                )}
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="inline-flex items-center gap-2.5 rounded-full bg-stone-900 px-10 py-3.5 text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:bg-black disabled:opacity-50"
+                  >
+                    <Send size={14} aria-hidden="true" />
+                    {status === "loading" ? "Sending…" : "Send Enquiry"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+
+          {/* ── Contact Info ── */}
+          <div className="space-y-10">
+            <div>
+              <p className="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-stone-700">
+                Reach us directly
+              </p>
+              <div className="space-y-6">
+                <a
+                  href="tel:+923284114902"
+                  className="group flex items-start gap-4"
+                >
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-stone-300 bg-white transition-colors group-hover:border-stone-900 group-hover:bg-stone-900 group-hover:text-white text-stone-700">
+                    <Phone size={15} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-stone-600">WhatsApp / Phone</p>
+                    <p className="mt-0.5 text-sm font-semibold text-stone-900">+92 328 4114902</p>
+                  </div>
+                </a>
+
+                <a
+                  href="mailto:tarakidswearofficial@gmail.com"
+                  className="group flex items-start gap-4"
+                >
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-stone-300 bg-white transition-colors group-hover:border-stone-900 group-hover:bg-stone-900 group-hover:text-white text-stone-700">
+                    <Mail size={15} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-stone-600">Email</p>
+                    <p className="mt-0.5 text-sm font-semibold text-stone-900 break-all">tarakidswearofficial@gmail.com</p>
+                  </div>
+                </a>
+
+                <div className="flex items-start gap-4">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-stone-300 bg-white text-stone-700">
+                    <MapPin size={15} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-stone-600">Location</p>
+                    <p className="mt-0.5 text-sm font-semibold text-stone-900">Lahore, Pakistan</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px w-full bg-stone-200" />
+
+            {/* Social */}
+            <div>
+              <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-stone-700">
+                Follow the brand
+              </p>
+              <div className="flex gap-3">
+                <a
+                  href="https://www.instagram.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-stone-700 transition-all hover:border-stone-900 hover:bg-stone-900 hover:text-white"
+                >
+                  <Instagram size={16} strokeWidth={1.8} aria-hidden />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-stone-700 transition-all hover:border-stone-900 hover:bg-stone-900 hover:text-white"
+                >
+                  <Facebook size={16} strokeWidth={1.8} aria-hidden />
+                </a>
+              </div>
+            </div>
+
+            {/* Brand note */}
+            <div className="rounded-2xl border border-stone-200 bg-stone-50 p-6">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-700">
+                Specialising in
+              </p>
+              <ul className="mt-3 space-y-2 text-sm font-medium text-stone-700">
+                <li>· Wedding &amp; Nikah wear for children</li>
+                <li>· Eid &amp; function outfits</li>
+                <li>· Custom &amp; bulk orders</li>
+                <li>· Wholesale for retailers</li>
+              </ul>
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
+    </main>
   );
-};
-
-export default Contact;
+}

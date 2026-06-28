@@ -240,14 +240,14 @@ export default function FeaturedProductsDropdown() {
         >
           <Link
             href="/allproducts"
-className="no-underline whitespace-nowrap text-green-800 hover:text-green-700 transition-all duration-300 flex items-center gap-1.5 group"
+className="no-underline whitespace-nowrap text-stone-700 hover:text-stone-900 transition-all duration-300 flex items-center gap-1.5 group text-sm tracking-wide"
             >
-              <span className="relative after:content-['']  after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-green-600 after:transition-all after:duration-300 group-hover:after:w-full">
+              <span className="relative after:content-['']  after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-stone-900 after:transition-all after:duration-300 group-hover:after:w-full">
               Shop
             </span>
             <ChevronDown
               size={16}
-              className={`text-green-700 group-hover:text-green-600 transition-transform duration-200 ${
+              className={`text-stone-500 group-hover:text-stone-900 transition-transform duration-200 ${
                 isOpen ? "rotate-180" : ""
               }`}
             />
@@ -290,7 +290,7 @@ className="no-underline whitespace-nowrap text-green-800 hover:text-green-700 tr
                       <Link
                         key={itemIndex}
                         href={item.href}
-                        className="block rounded px-2 py-2.5 text-sm text-green-800 transition-colors hover:bg-green-50/80 hover:text-green-700 touch-manipulation"
+                        className="block rounded px-2 py-2.5 text-sm text-stone-700 transition-colors hover:bg-stone-50 hover:text-stone-900 touch-manipulation"
                         onClick={() => {
                           setIsVisible(false);
                           setTimeout(() => setIsOpen(false), 200);

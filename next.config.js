@@ -6,7 +6,17 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   // Enable compression (Brotli/Gzip handled automatically by Next.js/Vercel)
   compress: true,
-  
+
+  // Shopify password-reset emails use /account/reset/... (lowercase). App route lives under /Account/... .
+  async rewrites() {
+    return [
+      {
+        source: "/account/reset/:id/:resetToken",
+        destination: "/Account/reset/:id/:resetToken",
+      },
+    ];
+  },
+
   // Note: swcMinify is enabled by default in Next.js 15, no need to specify
   
   // Optimize images

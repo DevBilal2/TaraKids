@@ -1,14 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Mail, ArrowRight, ChevronLeft, KeyRound } from "lucide-react";
 import { customerRecover } from "../lib/shopify";
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordForm() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const q = searchParams.get("email");
+    if (q) setEmail(q);
+  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,12 +63,12 @@ export default function ForgotPasswordPage() {
                 Reset password
               </h1>
               <p className="text-stone-600">
-                Enter the email for your Rosélle Studio account and we&apos;ll send you a link to reset your password.
+                Enter the email for your Tara Kids account and we&apos;ll send you a link to reset your password.
               </p>
             </div>
 
             {sent ? (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-green-800 text-sm">
+              <div className="mb-6 p-4 bg-stone-50 border border-stone-200 rounded-xl text-stone-800 text-sm">
                 Check your inbox. If an account exists for this email, you&apos;ll receive a link to reset your password.
               </div>
             ) : (
@@ -123,5 +130,19 @@ export default function ForgotPasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-b from-stone-50/30 to-white flex items-center justify-center">
+          <div className="h-8 w-8 border-2 border-stone-300 border-t-stone-700 rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <ForgotPasswordForm />
+    </Suspense>
   );
 }

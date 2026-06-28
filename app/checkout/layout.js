@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Checkout | Roselle Studio Lahore",
-  description: "Complete your order – artificial flowers, bouquets & decor. Secure checkout. Delivery across Lahore & Pakistan.",
+  title: "Checkout | Tara Kids",
+  description: "Complete your order — premium kids wedding and function wear. Secure checkout. Delivery across Pakistan.",
   robots: { index: false, follow: true },
 };
 

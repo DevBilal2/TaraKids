@@ -162,15 +162,15 @@ export default function BlogPage({ blogHandle = "elor-scents-blog" }) {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-4 border border-white/30">
               <BookOpen size={18} />
               <span className="text-sm font-medium uppercase tracking-wider">
-                Floral Journal
+                Style Journal
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Roselle Studio Blog
+              Tara Kids Blog
             </h1>
             <p className="text-xl text-stone-300 max-w-3xl mx-auto">
-              Discover floral inspiration, expert care tips, and the latest
-              trends in floral design
+              Discover kids fashion inspiration, styling tips, and the latest
+              trends in children&apos;s premium wear
             </p>
           </div>
 
@@ -302,9 +302,9 @@ export default function BlogPage({ blogHandle = "elor-scents-blog" }) {
 
               {/* Newsletter Signup */}
               <div className="p-4 bg-gradient-to-r from-stone-50 to-amber-50 rounded-xl border border-stone-200">
-                <h3 className="font-bold text-stone-800 mb-2">Stay Blooming</h3>
+                <h3 className="font-bold text-stone-800 mb-2">Stay Updated</h3>
                 <p className="text-sm text-stone-600 mb-3">
-                  Get weekly floral inspiration delivered to your inbox
+                  Get the latest kids fashion tips & new arrivals delivered to your inbox
                 </p>
                 <form className="space-y-2">
                   <input

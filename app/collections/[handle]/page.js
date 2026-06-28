@@ -12,20 +12,58 @@ export async function generateStaticParams() {
   return collections.map((col) => ({ handle: col.handle }));
 }
 
+function buildKeywords(title, description) {
+  const plain = (description || "").replace(/<[^>]*>/g, "");
+
+  // If description contains "seo: ..." line, use those exact phrases
+  const seoMatch = plain.match(/seo:\s*(.+)/i);
+  if (seoMatch) {
+    const seoKeywords = seoMatch[1]
+      .split(",")
+      .map(k => k.trim())
+      .filter(Boolean);
+    return [
+      `${title} Lahore`,
+      `${title} Pakistan`,
+      ...seoKeywords,
+    ].slice(0, 20);
+  }
+
+  // Fallback: extract individual words
+  const stopWords = new Set(["with", "and", "the", "for", "that", "this", "from", "have", "our", "your", "are", "also", "will", "very", "each", "been", "their", "they"]);
+  const descWords = plain
+    .split(/[\s,.\-\/|()]+/)
+    .map(w => w.toLowerCase().trim())
+    .filter(w => w.length >= 4 && !stopWords.has(w));
+  const uniqueDescWords = [...new Set(descWords)].slice(0, 8);
+
+  return [
+    `${title} Lahore`,
+    `${title} Pakistan`,
+    `kids ${title}`,
+    `children ${title} Pakistan`,
+    `${title} Tara Kids`,
+    ...uniqueDescWords.map(w => `${w} Lahore`),
+    ...uniqueDescWords.map(w => `kids ${w} Pakistan`),
+  ].slice(0, 15);
+}
+
 export async function generateMetadata({ params }) {
   const { handle } = await params;
   const collection = await getCollectionByHandle(handle);
   if (!collection) {
-    return { title: "Collection | Roselle Studio Lahore" };
+    return { title: "Collection | Tara Kids" };
   }
   const description =
     collection.description?.trim() ||
-    `Shop ${collection.title} – artificial flowers in Lahore, Pakistan. Roselle Studio.`;
+    `Shop ${collection.title} — premium kids fashion. Tara Kids, Pakistan.`;
+  const keywords = buildKeywords(collection.title, collection.description);
   return {
-    title: `${collection.title} | Artificial Flowers Lahore`,
+    title: `${collection.title} | Tara Kids Lahore`,
     description,
+    keywords,
     openGraph: {
-      title: `${collection.title} | Roselle Studio Lahore`,
+      title: `${collection.title} | Tara Kids Lahore`,
       description,
       images: collection.image
         ? [{ url: collection.image, width: 800, height: 800, alt: collection.title }]
@@ -33,7 +71,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${collection.title} | Roselle Studio`,
+      title: `${collection.title} | Tara Kids`,
       description,
     },
     alternates: { canonical: `/collections/${handle}` },

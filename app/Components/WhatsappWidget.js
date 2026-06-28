@@ -37,32 +37,22 @@ export default function WhatsAppWidgetClient() {
   }
 
   return (
-    <div className="fixed bottom-6 left-6 z-50">
-      <FloatingWhatsApp
-        phoneNumber="923436951448"
-        accountName="Rosélle Studio"
-        avatar="/image.png"
-        statusMessage="Typically replies within minutes"
-        chatMessage="Hello! 👋 How can we help you today?"
-        darkMode={false}
-        placeholder="Type your message here..."
-        allowClickAway={false}
-        allowEsc={true}
-        buttonStyle={{
-          backgroundColor: "#25D366",
-          position: "fixed",
-          left: "24px",
-          right: "auto",
-          bottom: "24px",
-        }}
-        chatboxStyle={{
-          borderRadius: "16px",
-          left: "24px",
-          right: "auto",
-          bottom: "84px",
-          position: "fixed",
-        }}
-      />
-    </div>
+    <FloatingWhatsApp
+      phoneNumber="923284114902"
+      accountName="Tara Kids"
+      avatar="/Logo.png"
+      statusMessage="Typically replies within minutes"
+      chatMessage="Hello! 👋 How can we help you today?"
+      darkMode={false}
+      placeholder="Type your message here..."
+      allowClickAway={true}
+      allowEsc={true}
+      buttonStyle={{
+        backgroundColor: "#25D366",
+      }}
+      chatboxStyle={{
+        borderRadius: "16px",
+      }}
+    />
   );
 }

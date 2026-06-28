@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { checkAuthStatus } from "../lib/auth";
+import { formatMoney } from "../lib/formatProductPrice";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -221,13 +222,13 @@ export default function CheckoutPage() {
             Your cart is empty
           </h1>
           <p className="text-stone-600 mb-6">
-            Add some beautiful flowers first
+            Add some beautiful pieces first
           </p>
           <Link
             href="/products"
             className="inline-flex items-center gap-2 px-6 py-3 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all font-medium border border-stone-900"
           >
-            Browse Flowers
+            Browse Products
           </Link>
         </div>
       </div>
@@ -263,7 +264,7 @@ export default function CheckoutPage() {
             <div className="flex items-center gap-2 mb-3">
               {formData.paymentMethod === "cod" ? (
                 <>
-                  <Banknote className="text-amber-600" size={18} />
+                  <Banknote className="text-stone-600" size={18} />
                   <span className="font-medium text-stone-800">
                     Cash on Delivery
                   </span>
@@ -650,7 +651,7 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                     <p className="text-sm text-stone-600 mt-1">
-                      Pay with cash when your flowers arrive. Our delivery
+                      Pay with cash when your order arrives. Our delivery
                       person will collect payment.
                     </p>
                   </div>
@@ -705,11 +706,11 @@ export default function CheckoutPage() {
                             <br />
                             Bank: HBL
                             <br />
-                            Account: FlowersHeavenly
+                            Account: Tara Kids
                             <br />
-                            Account #: 1234-5678901234
+                            Account #: [Your Account Number]
                             <br />
-                            IBAN: PKXX XXXX XXXX XXXX XXXX
+                            IBAN: [Your IBAN]
                           </p>
                         </div>
                       </div>
@@ -754,11 +755,14 @@ export default function CheckoutPage() {
                         {item.name}
                       </p>
                       <p className="text-xs text-stone-600">
-                        {item.quantity} × PKR {item.price.toFixed(2)}
+                        {item.quantity} × {formatMoney(item.price, item.currency || "PKR")}
                       </p>
                     </div>
                     <p className="font-bold text-stone-900 text-sm whitespace-nowrap">
-                      PKR {(item.price * item.quantity).toFixed(2)}
+                      {formatMoney(
+                        item.price * item.quantity,
+                        item.currency || "PKR"
+                      )}
                     </p>
                   </div>
                 ))}
@@ -768,13 +772,13 @@ export default function CheckoutPage() {
                 <div className="flex justify-between">
                   <span className="text-stone-700">Subtotal</span>
                   <span className="font-medium text-stone-800">
-                    PKR {subtotal.toFixed(2)}
+                    {formatMoney(subtotal, "PKR")}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-stone-700">Shipping</span>
                   <span className="font-medium text-stone-800">
-                    PKR {shipping.toFixed(2)}
+                    {formatMoney(shipping, "PKR")}
                   </span>
                 </div>
                 <div className="border-t border-stone-200 pt-3">
@@ -783,7 +787,7 @@ export default function CheckoutPage() {
                       Total
                     </span>
                     <span className="text-xl font-bold text-stone-800">
-                      PKR {total.toFixed(2)}
+                      {formatMoney(total, "PKR")}
                     </span>
                   </div>
                   <p className="text-xs text-stone-500 mt-1">

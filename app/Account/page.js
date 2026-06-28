@@ -22,6 +22,7 @@ import {
 import { checkAuthStatus, logout } from "../lib/auth";
 import { getCustomerOrders, updateCustomerProfile } from "../lib/shopify";
 import Link from "next/link";
+import { formatMoney } from "../lib/formatProductPrice";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -99,8 +100,8 @@ export default function AccountPage() {
     const statusMap = {
       PAID: {
         icon: CheckCircle,
-        color: "text-green-600",
-        bg: "bg-green-50",
+        color: "text-stone-700",
+        bg: "bg-stone-100",
         label: "Paid",
       },
       PENDING: {
@@ -144,8 +145,8 @@ export default function AccountPage() {
     const fulfillmentMap = {
       FULFILLED: {
         icon: Truck,
-        color: "text-green-600",
-        bg: "bg-green-50",
+        color: "text-stone-700",
+        bg: "bg-stone-100",
         label: "Delivered",
       },
       UNFULFILLED: {
@@ -509,8 +510,10 @@ export default function AccountPage() {
                               <div className="text-right">
                                 <p className="text-sm text-stone-600">Total</p>
                                 <p className="text-xl font-bold text-stone-800">
-                                  {order.totalPrice.amount}{" "}
-                                  {order.totalPrice.currencyCode}
+                                  {formatMoney(
+                                    order.totalPrice.amount,
+                                    order.totalPrice.currencyCode || "PKR"
+                                  )}
                                 </p>
                               </div>
                             </div>
@@ -585,9 +588,15 @@ export default function AccountPage() {
                     <h3 className="font-medium text-stone-800 mb-3">
                       Password
                     </h3>
-                    <button className="px-4 py-2 border border-stone-300 text-stone-700 rounded-full hover:bg-stone-50 transition-colors">
-                      Change Password
-                    </button>
+                    <p className="text-stone-600 text-sm mb-3">
+                      We&apos;ll email you a secure link from our store to set a new password.
+                    </p>
+                    <Link
+                      href={`/forgot-password?email=${encodeURIComponent(user.email || "")}`}
+                      className="inline-flex px-4 py-2 border border-stone-300 text-stone-700 rounded-full hover:bg-stone-50 transition-colors font-medium"
+                    >
+                      Change password
+                    </Link>
                   </div>
 
                   <div className="p-4 border border-stone-200 rounded-xl">

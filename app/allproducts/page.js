@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import ProductsContent from "./ProductsContent";
 
 export const metadata = {
-  title: "All Artificial Flowers & Bouquets | Roselle Studio Lahore",
+  title: "Shop All | Tara Kids — Premium Kids Wedding & Function Wear",
   description:
-    "Browse artificial flower bouquets, bunches, stems, decoration pieces & balloons. Full collection in Lahore, Pakistan. Wholesale available.",
+    "Browse Tara Kids' full collection of premium kids wedding dresses, function outfits, and formal wear. Elegant designs for every special occasion.",
 };
 
 export default async function AllProductsPage(props) {

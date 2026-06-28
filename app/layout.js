@@ -42,7 +42,7 @@ const geistMono = Geist_Mono({
   preload: false,
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.roselle.com.pk";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tarakids.com.pk";
 
 export const viewport = {
   width: "device-width",
@@ -52,39 +52,43 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: [{ url: "/tablogo.png", type: "image/png", sizes: "any" }],
+    shortcut: "/tablogo.png",
+    apple: "/tablogo.png",
+  },
   title: {
-    default: "Roselle Studio | Artificial Flowers, Bouquets & Decor in Lahore, Pakistan",
-    template: "%s | Roselle Studio Lahore",
+    default: "Tara Kids | Premium Kids Wedding & Function Wear in Pakistan",
+    template: "%s | Tara Kids",
   },
   description:
-    "Lahore's leading artificial flower brand. Shop bouquets, bunches, flower arrangements, decoration pieces, balloons & more. Wholesale artificial flowers in Pakistan. Free delivery in Lahore.",
+    "Pakistan's premier kids fashion brand. Shop luxury wedding dresses, function outfits, and premium formal wear for children. Elegant designs crafted for special occasions.",
   keywords: [
-    "artificial flowers Lahore",
-    "artificial flowers Pakistan",
-    "fake flowers Lahore",
-    "flower bouquets Pakistan",
-    "artificial flower bouquets",
-    "flower decoration Lahore",
-    "wholesale artificial flowers Pakistan",
-    "flower bunches",
-    "balloon decoration Lahore",
-    "home decoration flowers",
-    "Roselle Studio",
+    "kids wedding dresses Pakistan",
+    "kids formal wear Lahore",
+    "children wedding outfits Pakistan",
+    "kids function dresses",
+    "premium kids fashion Pakistan",
+    "luxury kids wear",
+    "kids sherwani Pakistan",
+    "kids lehenga Pakistan",
+    "children formal dresses Lahore",
+    "Tara Kids",
   ],
   openGraph: {
     type: "website",
     locale: "en_PK",
     url: SITE_URL,
-    siteName: "Roselle Studio",
-    title: "Roselle Studio | Artificial Flowers & Decor in Lahore, Pakistan",
+    siteName: "Tara Kids",
+    title: "Tara Kids | Premium Kids Wedding & Function Wear Pakistan",
     description:
-      "Shop artificial bouquets, bunches, decoration pieces & balloons. Wholesale flowers in Lahore & Pakistan.",
-    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "Roselle Studio - Artificial Flowers Lahore" }],
+      "Luxury wedding dresses and function wear for children. Elegant premium designs for your little ones' most special moments.",
+    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "Tara Kids - Premium Kids Fashion Pakistan" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Roselle Studio | Artificial Flowers Lahore, Pakistan",
-    description: "Bouquets, bunches, decor & wholesale artificial flowers in Lahore.",
+    title: "Tara Kids | Premium Kids Fashion Pakistan",
+    description: "Luxury wedding dresses and function wear for children in Pakistan.",
   },
   alternates: { canonical: SITE_URL },
   robots: { index: true, follow: true },
