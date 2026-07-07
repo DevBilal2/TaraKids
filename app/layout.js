@@ -93,7 +93,7 @@ export const metadata = {
   alternates: { canonical: SITE_URL },
   robots: { index: true, follow: true },
   verification: {
-    google: "yP5qZEXyUfyoIonluGUQswL0xn6Uq5qqsiLdgAo9WeY",
+    google: ["yP5qZEXyUfyoIonluGUQswL0xn6Uq5qqsiLdgAo9WeY", "zF1UmwiB61XxP5jfYj_slcSzH_stfYQn5TWN40Tecn8"],
   },
 };
 
