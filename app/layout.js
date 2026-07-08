@@ -109,6 +109,22 @@ export const metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Tara Kids",
+  url: SITE_URL,
+  logo: `${SITE_URL}/navbarfooter.png`,
+  sameAs: [],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Tara Kids",
+  url: SITE_URL,
+};
+
 export default function RootLayout({ children }) {
   return (
     <CartProvider>
@@ -125,6 +141,14 @@ export default function RootLayout({ children }) {
               .scrollbar-hide::-webkit-scrollbar{display:none}
             `
           }} />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          />
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <NavBarScrollEffect />
