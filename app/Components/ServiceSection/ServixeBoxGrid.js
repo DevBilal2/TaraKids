@@ -64,7 +64,7 @@ const ProductsGrid = ({ data }) => {
             onClick={() => handleViewDetails(item)}
             className="w-full min-w-0 cursor-pointer touch-manipulation text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2"
           >
-            <div className="group/image relative aspect-square w-full overflow-hidden bg-stone-50">
+            <div className="group/image relative aspect-[4/5] w-full overflow-hidden bg-stone-50">
               <ProductCardImage item={item} />
             </div>
             <div className="mt-4 flex flex-col items-center gap-1 px-1 text-center">

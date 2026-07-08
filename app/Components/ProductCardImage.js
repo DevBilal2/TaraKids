@@ -34,7 +34,7 @@ export default function ProductCardImage({
           alt=""
           aria-hidden
           fill
-          className="absolute inset-0 z-0 object-contain object-center p-1.5 sm:p-2"
+          className="absolute inset-0 z-0 object-cover object-center"
           sizes={sizes}
           loading="lazy"
           quality={quality}
@@ -45,7 +45,7 @@ export default function ProductCardImage({
           src={item.image}
           alt={alt}
           fill
-          className="absolute inset-0 z-[1] object-contain object-center p-1.5 transition-opacity duration-500 ease-out group-hover/image:opacity-0 sm:p-2 motion-reduce:transition-none motion-reduce:group-hover/image:opacity-100"
+          className="absolute inset-0 z-[1] object-cover object-center transition-opacity duration-500 ease-out group-hover/image:opacity-0 motion-reduce:transition-none motion-reduce:group-hover/image:opacity-100"
           sizes={sizes}
           loading="lazy"
           quality={quality}
@@ -61,7 +61,7 @@ export default function ProductCardImage({
       src={item.image}
       alt={alt}
       fill
-      className="object-contain object-center p-1.5 transition-opacity duration-300 group-hover/image:opacity-95 sm:p-2"
+      className="object-cover object-center transition-opacity duration-300 group-hover/image:opacity-95"
       sizes={sizes}
       loading="lazy"
       quality={quality}

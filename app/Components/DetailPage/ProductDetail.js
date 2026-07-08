@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/app/context/CartContext";
 import { formatMoney, formatProductPrice } from "@/app/lib/formatProductPrice";
 import {
@@ -14,7 +15,6 @@ import {
   Plus,
   Minus,
   Share2,
-  Check,
   ChevronDown,
   ChevronUp,
   MessageCircle,
@@ -22,7 +22,10 @@ import {
 } from "lucide-react";
 
 export default function ProductDetail({ product }) {
+  const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [mobileImage, setMobileImage] = useState(0);
+  const mobileScrollRef = React.useRef(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(
     product.colors?.[0] || "Classic White"
@@ -63,6 +66,14 @@ export default function ProductDetail({ product }) {
   const decrementQuantity = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
+  const handleBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   // If no product data, show loading/error
   if (!product) {
     return (
@@ -76,96 +87,125 @@ export default function ProductDetail({ product }) {
     <div className="min-h-screen bg-gradient-to-b from-stone-50/30 to-white">
       {/* Back Navigation */}
       <div className="px-5 lg:px-8 xl:px-[8%] py-4">
-        <a
-          href="/allproducts"
+        <button
+          type="button"
+          onClick={handleBack}
           className="inline-flex items-center gap-2 text-stone-600 hover:text-stone-800 transition-colors"
         >
           <ChevronLeft size={20} />
-          <span>Back to Products</span>
-        </a>
+          <span>Back</span>
+        </button>
       </div>
 
       <div className="mx-auto px-0 py-4 lg:px-8 lg:py-4 xl:px-[8%]">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Mobile: full-width stack — no side gaps, images flush */}
-          <div className="flex flex-col gap-0 lg:hidden">
-            {(images.filter(Boolean).length > 0
-              ? images.filter(Boolean)
-              : [null]
-            ).map((img, index) => (
-              <div
-                key={index}
-                className="relative aspect-square w-full overflow-hidden bg-stone-100"
-              >
-                {img ? (
-                  <Image
-                    src={img}
-                    alt={`${product.Heading} - ${index + 1}`}
-                    fill
-                    className="object-cover object-center"
-                    sizes="100vw"
-                    priority={index === 0}
-                    quality={75}
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-8xl text-stone-300">🌸</span>
-                  </div>
-                )}
-                {index === 0 && (
-                  <>
-                    <div className="absolute left-3 top-3 flex flex-col gap-2">
-                      {product.isNew && (
-                        <span className="rounded-full border border-emerald-700 bg-emerald-600 px-3 py-1 text-xs font-medium text-white">
-                          New Arrival
-                        </span>
-                      )}
-                      {product.bestSeller && (
-                        <span className="rounded-full border border-stone-900 bg-stone-900 px-3 py-1 text-xs font-medium text-white">
-                          Best Seller
-                        </span>
-                      )}
-                      {product.discount && (
-                        <span className="rounded-full border border-stone-900 bg-stone-800 px-3 py-1 text-xs font-medium text-white">
-                          {product.discount}% OFF
-                        </span>
-                      )}
+          {/* Mobile: swipeable single-image carousel */}
+          <div className="relative lg:hidden">
+            <div
+              ref={mobileScrollRef}
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                const index = Math.round(el.scrollLeft / el.clientWidth);
+                setMobileImage(index);
+              }}
+              className="flex w-full snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {(images.filter(Boolean).length > 0
+                ? images.filter(Boolean)
+                : [null]
+              ).map((img, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-[4/5] w-full flex-shrink-0 snap-center overflow-hidden bg-stone-100"
+                >
+                  {img ? (
+                    <Image
+                      src={img}
+                      alt={`${product.Heading} - ${index + 1}`}
+                      fill
+                      className="object-contain object-center"
+                      sizes="100vw"
+                      priority={index === 0}
+                      quality={75}
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <span className="text-8xl text-stone-300">🌸</span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleWishlist}
-                      aria-label={
-                        addedToWishlist
-                          ? `Remove ${product.Heading} from wishlist`
-                          : `Add ${product.Heading} to wishlist`
-                      }
-                      className="absolute right-3 top-3 rounded-full border border-stone-200 bg-white/90 p-3 shadow-sm backdrop-blur-sm transition-all hover:scale-110 hover:shadow-md"
-                    >
-                      <Heart
-                        size={22}
-                        aria-hidden="true"
-                        className={
-                          addedToWishlist
-                            ? "fill-stone-700 text-stone-700"
-                            : "text-stone-600"
-                        }
-                      />
-                    </button>
-                  </>
-                )}
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="absolute left-3 top-3 flex flex-col gap-2">
+              {product.isNew && (
+                <span className="rounded-full border border-emerald-700 bg-emerald-600 px-3 py-1 text-xs font-medium text-white">
+                  New Arrival
+                </span>
+              )}
+              {product.bestSeller && (
+                <span className="rounded-full border border-stone-900 bg-stone-900 px-3 py-1 text-xs font-medium text-white">
+                  Best Seller
+                </span>
+              )}
+              {product.discount && (
+                <span className="rounded-full border border-stone-900 bg-stone-800 px-3 py-1 text-xs font-medium text-white">
+                  {product.discount}% OFF
+                </span>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={handleWishlist}
+              aria-label={
+                addedToWishlist
+                  ? `Remove ${product.Heading} from wishlist`
+                  : `Add ${product.Heading} to wishlist`
+              }
+              className="absolute right-3 top-3 rounded-full border border-stone-200 bg-white/90 p-3 shadow-sm backdrop-blur-sm transition-all hover:scale-110 hover:shadow-md"
+            >
+              <Heart
+                size={22}
+                aria-hidden="true"
+                className={
+                  addedToWishlist
+                    ? "fill-stone-700 text-stone-700"
+                    : "text-stone-600"
+                }
+              />
+            </button>
+
+            {images.filter(Boolean).length > 1 && (
+              <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                {images.filter(Boolean).map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    aria-label={`Go to image ${index + 1}`}
+                    onClick={() => {
+                      const el = mobileScrollRef.current;
+                      if (el) el.scrollTo({ left: el.clientWidth * index, behavior: "smooth" });
+                    }}
+                    className={`h-1.5 rounded-full transition-all ${
+                      mobileImage === index
+                        ? "w-5 bg-white"
+                        : "w-1.5 bg-white/60"
+                    }`}
+                  />
+                ))}
               </div>
-            ))}
+            )}
           </div>
 
           {/* Desktop: main + thumbnails */}
           <div className="hidden lg:block">
-            <div className="relative mb-3 aspect-square w-full overflow-hidden bg-stone-100">
+            <div className="relative mb-3 aspect-[4/5] w-full overflow-hidden bg-stone-100">
               {images[selectedImage] ? (
                 <Image
                   src={images[selectedImage]}
                   alt={`${product.Heading} - Image ${selectedImage + 1}`}
                   fill
-                  className="object-cover object-center"
+                  className="object-contain object-center"
                   sizes="(max-width: 1280px) 50vw, 40vw"
                   priority
                   quality={75}
@@ -471,84 +511,6 @@ export default function ProductDetail({ product }) {
                     product.description ||
                     "This exquisite piece is crafted with premium quality fabrics and meticulous attention to detail. Designed for life's most special moments — weddings, Eid, and grand celebrations — it ensures your child looks and feels extraordinary."}
                 </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="text-xl font-semibold text-stone-800 mb-3">
-                    Key Features
-                  </h4>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <Check
-                        className="text-emerald-600 mt-1 flex-shrink-0"
-                        size={20}
-                      />
-                      <span className="text-stone-700">
-                        Hand-selected premium blooms
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check
-                        className="text-emerald-600 mt-1 flex-shrink-0"
-                        size={20}
-                      />
-                      <span className="text-stone-700">
-                        Premium quality fabric & stitching
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check
-                        className="text-emerald-600 mt-1 flex-shrink-0"
-                        size={20}
-                      />
-                      <span className="text-stone-700">
-                        Carefully packed & delivered across Pakistan
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check
-                        className="text-emerald-600 mt-1 flex-shrink-0"
-                        size={20}
-                      />
-                      <span className="text-stone-700">
-                        Designed for weddings, functions & events
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold text-stone-800 mb-3">
-                    Care Instructions
-                  </h4>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2">
-                      <span className="text-stone-600 font-medium">🧹</span>
-                      <span className="text-stone-700">
-                        Dust gently with a soft cloth
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-stone-600 font-medium">☀️</span>
-                      <span className="text-stone-700">
-                        Avoid direct sunlight to prevent fading
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-stone-600 font-medium">🏠</span>
-                      <span className="text-stone-700">
-                        Store in a dry place
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-stone-600 font-medium">✨</span>
-                      <span className="text-stone-700">
-                        No watering needed — lasts for years
-                      </span>
-                    </li>
-                  </ul>
-                </div>
               </div>
             </div>
           )}

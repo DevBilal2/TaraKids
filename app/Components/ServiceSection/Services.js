@@ -246,7 +246,7 @@ const Products = async () => {
 
                 {collection.handle && (
                   <a
-                    href={`/allproducts?category=${collection.handle}`}
+                    href={`/collections/${collection.handle}`}
                     className="group inline-flex items-center gap-2 text-stone-800 hover:text-stone-900 font-medium"
                   >
                     <span>View Collection</span>

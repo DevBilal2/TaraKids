@@ -41,7 +41,7 @@ export default async function CollectionsSection() {
               <div key={collection.id} className="group">
                 {/* Collection Card */}
                 <a
-                  href={`/allproducts?category=${collectionHandle}`}
+                  href={`/collections/${collectionHandle}`}
                   className="block relative h-96 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
                 >
                   {/* Background Image/Color */}
