@@ -53,9 +53,9 @@ export const viewport = {
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   icons: {
-    icon: [{ url: "/tablogo.png", type: "image/png", sizes: "any" }],
-    shortcut: "/tablogo.png",
-    apple: "/tablogo.png",
+    icon: [{ url: "/favicon-tarakids.png", type: "image/png", sizes: "any" }],
+    shortcut: "/favicon-tarakids.png",
+    apple: "/favicon-tarakids.png",
   },
   title: {
     default: "Tara Kids | Premium Kids Wedding & Function Wear in Pakistan",
