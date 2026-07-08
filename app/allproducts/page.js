@@ -6,6 +6,18 @@ export const metadata = {
   title: "Shop All | Tara Kids — Premium Kids Wedding & Function Wear",
   description:
     "Browse Tara Kids' full collection of premium kids wedding dresses, function outfits, and formal wear. Elegant designs for every special occasion.",
+  keywords: [
+    "shop kids wear online Pakistan",
+    "kids wedding dresses Lahore",
+    "kids Eid dresses Pakistan",
+    "kids party wear Lahore",
+    "kids formal wear Pakistan",
+    "kids designer dresses online Pakistan",
+    "girls lehenga Lahore",
+    "boys sherwani Pakistan",
+    "kids festival wear Pakistan",
+    "Tara Kids Lahore",
+  ],
 };
 
 export default async function AllProductsPage(props) {

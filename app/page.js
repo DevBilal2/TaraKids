@@ -80,6 +80,7 @@ export const metadata = {
   description:
     "Tara Kids Lahore — Pakistan's premier kids fashion brand. Shop luxury wedding dresses, kids suits, girls party dresses & function outfits. Premium kids wedding wear delivered across Pakistan.",
   keywords: [
+    "Tara Kids Lahore",
     "kids wedding dress Lahore",
     "kids wedding wear Pakistan",
     "kids suits Pakistan",
@@ -89,7 +90,16 @@ export const metadata = {
     "kids lehenga Pakistan",
     "kids function dress Lahore",
     "kids event wear Pakistan",
-    "Tara Kids Lahore",
+    "kids Eid dresses Pakistan",
+    "Eid collection for kids Lahore",
+    "kids festival wear Pakistan",
+    "girls gharara Lahore",
+    "boys kurta pajama Pakistan",
+    "kids designer wear Lahore",
+    "kids fashion brand Pakistan",
+    "kids boutique Lahore",
+    "baby girl dresses online Pakistan",
+    "kids clothes online Lahore",
   ],
   openGraph: {
     title: "Tara Kids | Premium Kids Wedding & Function Wear Lahore",
