@@ -147,7 +147,7 @@ export default function ProductDetail({ product }) {
               ).map((img, index) => (
                 <div
                   key={index}
-                  className="relative aspect-[4/5] w-full flex-shrink-0 snap-center overflow-hidden bg-stone-100"
+                  className="relative aspect-[3/4] w-full flex-shrink-0 snap-center overflow-hidden bg-stone-100"
                 >
                   {img ? (
                     <Image
@@ -230,7 +230,7 @@ export default function ProductDetail({ product }) {
 
           {/* Desktop: main + thumbnails */}
           <div className="hidden lg:block">
-            <div className="relative mb-3 aspect-[4/5] w-full overflow-hidden bg-stone-100">
+            <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden bg-stone-100">
               {images[selectedImage] ? (
                 <Image
                   src={images[selectedImage]}
@@ -296,7 +296,7 @@ export default function ProductDetail({ product }) {
                     onClick={() => setSelectedImage(index)}
                     aria-label={`View product image ${index + 1}`}
                     aria-pressed={selectedImage === index}
-                    className={`relative h-16 w-16 shrink-0 overflow-hidden transition-all md:h-20 md:w-20 ${
+                    className={`relative aspect-[3/4] w-16 shrink-0 overflow-hidden transition-all md:w-20 ${
                       selectedImage === index
                         ? "ring-2 ring-stone-800 ring-offset-1"
                         : "opacity-80 hover:opacity-100"
@@ -307,7 +307,7 @@ export default function ProductDetail({ product }) {
                         src={img}
                         alt={`Thumbnail ${index + 1}`}
                         fill
-                        className="object-cover object-center"
+                        className="object-contain object-center"
                         sizes="80px"
                         loading="lazy"
                         quality={70}
