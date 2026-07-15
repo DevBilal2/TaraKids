@@ -88,11 +88,18 @@ export default async function ProductPage({ params }) {
   }
 
   // Transform Shopify data to match component structure
-  const firstVariantId = product.variants?.edges?.[0]?.node?.id || null;
+  const variants = product.variants?.edges?.map((edge) => ({
+    id: edge.node.id,
+    availableForSale: edge.node.availableForSale,
+    price: edge.node.price?.amount,
+    compareAtPrice: edge.node.compareAtPrice?.amount || null,
+    selectedOptions: edge.node.selectedOptions || [],
+  })) || [];
+  const firstVariantId = variants[0]?.id || null;
   const minPrice = product.priceRange?.minVariantPrice;
   const currency = minPrice?.currencyCode || "PKR";
   const amount = minPrice?.amount || "0";
-  const compareAtAmount = product.variants?.edges?.[0]?.node?.compareAtPrice?.amount;
+  const compareAtAmount = variants[0]?.compareAtPrice;
   const cleanDescription = product.description
     ?.replace(/<[^>]*>/g, "")
     .replace(/seo:\s*.+$/im, "")
@@ -101,6 +108,7 @@ export default async function ProductPage({ params }) {
   const transformedProduct = {
     id: product.id,
     variantId: firstVariantId,
+    variants,
     Heading: product.title,
     handle: product.handle,
     description: cleanDescription?.substring(0, 150),
@@ -124,7 +132,7 @@ export default async function ProductPage({ params }) {
         )
       : null,
     shipping: `Free delivery on orders over ${formatMoney(FREE_SHIPPING_PKR_THRESHOLD, "PKR")}`,
-    inStock: product.variants?.edges[0]?.node?.availableForSale || false,
+    inStock: variants[0]?.availableForSale || false,
   };
 
   return <ProductDetail product={transformedProduct} />;

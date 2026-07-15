@@ -961,12 +961,18 @@ export async function fetchProductByHandle(handle) {
           name
           values
         }
-        variants(first: 10) {
+        variants(first: 100) {
           edges {
             node {
+              id
               availableForSale
+              selectedOptions {
+                name
+                value
+              }
               price {
                 amount
+                currencyCode
               }
               compareAtPrice {
                 amount

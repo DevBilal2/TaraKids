@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/app/context/CartContext";
@@ -40,17 +40,48 @@ export default function ProductDetail({ product }) {
 
   const reviews = [];
 
-  const displayPrice =
-    product.priceFormatted ||
-    formatProductPrice({ price: product.price, currency: product.currency });
-  const displayCompareAt =
-    product.compareAtFormatted ||
-    (product.compareAtAmount
-      ? formatMoney(product.compareAtAmount, product.currency || "PKR")
-      : null);
+  // Find the variant matching the currently selected color/size, if the
+  // product has variant-level data (falls back to the base product otherwise).
+  const selectedVariant = useMemo(() => {
+    if (!product.variants || product.variants.length === 0) return null;
+    return (
+      product.variants.find((variant) =>
+        variant.selectedOptions.every((opt) => {
+          if (opt.name === "Color") return opt.value === selectedColor;
+          if (opt.name === "Size") return opt.value === selectedSize;
+          return true;
+        })
+      ) || null
+    );
+  }, [product.variants, selectedColor, selectedSize]);
+
+  const activePrice = selectedVariant ? selectedVariant.price : product.price;
+  const activeCompareAtAmount = selectedVariant
+    ? selectedVariant.compareAtPrice
+    : product.compareAtAmount;
+  const activeInStock = selectedVariant
+    ? selectedVariant.availableForSale
+    : product.inStock;
+  const activeVariantId = selectedVariant ? selectedVariant.id : product.variantId;
+  const activeDiscount = activeCompareAtAmount
+    ? Math.round((1 - parseFloat(activePrice) / parseFloat(activeCompareAtAmount)) * 100)
+    : null;
+
+  const displayPrice = formatProductPrice({
+    price: activePrice,
+    currency: product.currency,
+  });
+  const displayCompareAt = activeCompareAtAmount
+    ? formatMoney(activeCompareAtAmount, product.currency || "PKR")
+    : null;
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    addToCart(
+      { ...product, variantId: activeVariantId, price: activePrice },
+      quantity,
+      selectedColor,
+      selectedSize
+    );
   };
 
   const handleWishlist = () => {
@@ -148,9 +179,9 @@ export default function ProductDetail({ product }) {
                   Best Seller
                 </span>
               )}
-              {product.discount && (
+              {activeDiscount && (
                 <span className="rounded-full border border-stone-900 bg-stone-800 px-3 py-1 text-xs font-medium text-white">
-                  {product.discount}% OFF
+                  {activeDiscount}% OFF
                 </span>
               )}
             </div>
@@ -227,9 +258,9 @@ export default function ProductDetail({ product }) {
                     Best Seller
                   </span>
                 )}
-                {product.discount && (
+                {activeDiscount && (
                   <span className="rounded-full border border-stone-900 bg-stone-800 px-3 py-1 text-xs font-medium text-white">
-                    {product.discount}% OFF
+                    {activeDiscount}% OFF
                   </span>
                 )}
               </div>
@@ -318,7 +349,7 @@ export default function ProductDetail({ product }) {
 
             {/* Stock */}
             <div className="flex items-center gap-3 mb-6">
-              {product.inStock ? (
+              {activeInStock ? (
                 <span className="text-emerald-600 font-medium">In Stock</span>
               ) : (
                 <span className="text-stone-500 font-medium">Out of Stock</span>
@@ -337,7 +368,7 @@ export default function ProductDetail({ product }) {
                       {displayCompareAt}
                     </span>
                     <span className="px-3 py-1 bg-stone-100 text-stone-700 text-sm font-medium rounded-full border border-stone-200">
-                      Save {product.discount || "20"}%
+                      Save {activeDiscount || "20"}%
                     </span>
                   </>
                 )}
@@ -423,10 +454,15 @@ export default function ProductDetail({ product }) {
             <div className="mb-8">
               <button
                 onClick={handleAddToCart}
-                className="w-full py-4 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all duration-300 shadow-sm hover:shadow-md font-semibold flex items-center justify-center gap-3 border border-stone-900"
+                disabled={!activeInStock}
+                className="w-full py-4 bg-stone-800 text-white rounded-full hover:bg-stone-900 transition-all duration-300 shadow-sm hover:shadow-md font-semibold flex items-center justify-center gap-3 border border-stone-900 disabled:bg-stone-300 disabled:border-stone-300 disabled:cursor-not-allowed disabled:hover:shadow-sm"
               >
                 <ShoppingBag size={22} />
-                <span>Add to Cart • {displayPrice}</span>
+                <span>
+                  {activeInStock
+                    ? `Add to Cart • ${displayPrice}`
+                    : "Out of Stock"}
+                </span>
               </button>
             </div>
 
